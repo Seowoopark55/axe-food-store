@@ -549,7 +549,7 @@ export default function App() {
                   letterSpacing: "-0.03em"
                 }}
               >
-                메뉴
+                FOOD MENU
               </h2>
 
               <div
