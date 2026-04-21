@@ -33,6 +33,7 @@ export default function App() {
       buffStats: [
         { label: "지속시간", value: "48초" },
         { label: "스태미나 재생 증가", value: "20" },
+        
         { label: "전력질주 소모 스태미나 감소", value: "2" }
       ],
       description:
@@ -187,47 +188,48 @@ export default function App() {
       ],
       description: "알록달록한 껍질 사이에 크림을 채운 한입 디저트다."
     },
+   {
+  id: 9,
+  name: "밀크티",
+  tag: "체력회복+",
+  tagColor: "#34d399",
+  setCount: 8,
+  price: 1000,
+  image: milkTeaImage,
+  detailImage: milkTeaImage,
+  consumeStats: [
+    { label: "목마름", value: "+5120" },
+    { label: "섭취시간", value: "3초" }
+  ],
+  buffStats: [
+    { label: "스태미나 증가", value: "17" },
+    { label: "체력 회복", value: "33초 동안 32" }
+  ],
+  description: "부드럽고 달콤하게 즐길 수 있는 시원한 밀크티다."
+},
     {
-      id: 9,
-      name: "밀크티",
-      tag: "목마름+",
-      tagColor: "#38bdf8",
-      setCount: 8,
-      price: 1000,
-      image: milkTeaImage,
-      detailImage: milkTeaImage,
-      consumeStats: [
-        { label: "배고픔", value: "+300" },
-        { label: "목마름", value: "+4800" },
-        { label: "집중력", value: "+300" },
-        { label: "경험치", value: "+20" },
-        { label: "섭취시간", value: "3.5초" }
-      ],
-      buffStats: [],
-      description: "달콤하고 부드러운 풍미가 느껴지는 시원한 밀크티다."
-    },
-    {
-      id: 10,
-      name: "아이스 마끼아또",
-      tag: "집중력+",
-      tagColor: "#60a5fa",
-      setCount: 10,
-      price: 2000,
-      image: icedMacchiatoImage,
-      detailImage: icedMacchiatoImage,
-      consumeStats: [
-        { label: "배고픔", value: "+200" },
-        { label: "목마름", value: "+5200" },
-        { label: "집중력", value: "+900" },
-        { label: "경험치", value: "+35" },
-        { label: "섭취시간", value: "3초" }
-      ],
-      buffStats: [
-        { label: "지속시간", value: "5분" },
-        { label: "집중력 증가", value: "+10%" }
-      ],
-      description: "진한 커피와 부드러운 우유가 어우러진 시원한 마끼아또다."
-    }
+  id: 10,
+  name: "아이스 마끼아또",
+  tag: "이동속도+",
+  tagColor: "#60a5fa",
+  setCount: 10,
+  price: 2000,
+  image: icedMacchiatoImage,
+  detailImage: icedMacchiatoImage,
+  consumeStats: [
+    { label: "배고픔", value: "+570" },
+    { label: "목마름", value: "+4520" },
+    { label: "집중력", value: "+500" },
+    { label: "경험치", value: "+81" },
+    { label: "섭취시간", value: "3초" }
+  ],
+  buffStats: [
+    { label: "지속시간", value: "2분 18초" },
+    { label: "이동 속도 증가", value: "6%" },
+    { label: "전력질주 소모 스태미나 감소", value: "4" }
+  ],
+  description: "시원하게 즐기는 아이스 마끼아또다."
+}
   ];
 
   const [cart, setCart] = useState([]);
