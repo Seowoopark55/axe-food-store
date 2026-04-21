@@ -101,7 +101,7 @@ export default function App() {
     },
     {
       id: 9,
-      category: "restore",
+      category: "combat",
       name: "밀크티",
       tag: "체력회복+",
       tagColor: "#34d399",
@@ -614,12 +614,12 @@ export default function App() {
                   </div>
 
                   <div
-                    style={{
-                      display: "grid",
-                      gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-                      gap: "20px"
-                    }}
-                  >
+  style={{
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(260px, 320px))",
+    gap: "20px"
+  }}
+>
                     {group.products.map((product) => (
                       <div
                         key={product.id}
