@@ -277,7 +277,7 @@ export default function App() {
       setIsSubmitting(true);
 
       await fetch(
-        "https://script.google.com/macros/s/AKfycbwLKghyekt4Z0MUH5701nOvsB5ybxYkUxuLMJG7u9h1oBmVcmb3CwWNPTZhxdrDdhmsNA/exec",
+        "https://script.google.com/macros/s/AKfycbz4KXL7HHYU5tbmvNVgM2pRuO9myOyV63aZBmH7ornJatCbod2cbz_nZDA22vzdxAza/exec",
         {
           method: "POST",
           mode: "no-cors",
