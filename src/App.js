@@ -276,17 +276,22 @@ export default function App() {
     try {
       setIsSubmitting(true);
 
-      await fetch(
-        "https://script.google.com/macros/s/AKfycbzN4fW1Bylil6y171PI8NpwCjpG2XX_rsljhpgMhKjw7QRQXzw_7-8omP3ldJmtq2KP-A/exec",
+      const response = await fetch(
+        "https://script.google.com/macros/s/AKfycbybSWM7woWnyxu3hlsjbwU-dhd4xnozoUsgcM2yYnyEgy4XzMgtg6i_9w-tx0Zlzk3cbA/exec",
         {
           method: "POST",
-          mode: "no-cors",
           headers: {
-            "Content-Type": "text/plain;charset=utf-8"
+            "Content-Type": "application/json"
           },
           body: JSON.stringify(orderData)
         }
       );
+
+      const result = await response.json();
+
+      if (result.result !== "success") {
+        throw new Error(result.message || "주문 저장 실패");
+      }
 
       setCart([]);
       setOrderInfo({
