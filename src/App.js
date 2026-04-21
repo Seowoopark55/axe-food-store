@@ -413,13 +413,14 @@ export default function App() {
         >
           <div>
             <div
-              style={{
-                position: "relative",
-                overflow: "hidden",
-                borderRadius: "28px",
-                padding: "52px 38px 40px",
-                marginBottom: "34px",
-                background:
+  style={{
+    position: "relative",
+    overflow: "hidden",
+    borderRadius: "28px",
+    padding: "52px 38px 40px",
+    maxWidth: "1200px",
+    margin: "0 auto 34px",
+    background:
                   "linear-gradient(180deg, rgba(10,16,30,0.94) 0%, rgba(9,17,32,0.96) 100%)",
                 border: "1px solid rgba(191,145,79,0.22)",
                 boxShadow: "0 18px 50px rgba(0,0,0,0.35)"
