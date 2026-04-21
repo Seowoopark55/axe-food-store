@@ -13,9 +13,28 @@ import icedMacchiatoImage from "./iced_macchiato.png";
 import axePosterImage from "./axe_poster.png";
 
 export default function App() {
+  const CATEGORY_CONFIG = [
+    {
+      key: "restore",
+      title: "기본 식사 / 음료",
+      description: "배고픔과 목마름 해소용 메뉴"
+    },
+    {
+      key: "life",
+      title: "생활직 버프",
+      description: "벌목 · 채광 · 낚시용 버프 메뉴"
+    },
+    {
+      key: "combat",
+      title: "전투 보조",
+      description: "이동속도 · 회복 관련 메뉴"
+    }
+  ];
+
   const PRODUCTS = [
     {
       id: 1,
+      category: "restore",
       name: "라면",
       tag: "배고픔+",
       tagColor: "#d8a95e",
@@ -33,14 +52,96 @@ export default function App() {
       buffStats: [
         { label: "지속시간", value: "48초" },
         { label: "스태미나 재생 증가", value: "20" },
-        
-        { label: "전력질주 소모 스태미나 감소", value: "-2" }
+        { label: "전력질주 소모 스태미나 감소", value: "2" }
       ],
       description:
         "뜨거운 물에 끓여 간편하게 즐길 수 있는 매콤한 기본 라면이다."
     },
     {
+      id: 3,
+      category: "restore",
+      name: "계란 샐러드",
+      tag: "배고픔+",
+      tagColor: "#d8a95e",
+      setCount: 6,
+      price: 400,
+      image: eggSaladImage,
+      detailImage: eggSaladImage,
+      consumeStats: [
+        { label: "배고픔", value: "+5650" },
+        { label: "목마름", value: "-150" },
+        { label: "집중력", value: "+400" },
+        { label: "경험치", value: "+17" },
+        { label: "섭취시간", value: "5.5초" }
+      ],
+      buffStats: [
+        { label: "지속시간", value: "1분 18초" },
+        { label: "스태미나 재생 증가", value: "10" }
+      ],
+      description: "잘게 썬 삶은 계란을 크리미하게 버무린 샐러드다."
+    },
+    {
+      id: 5,
+      category: "restore",
+      name: "무난한 딸기우유",
+      tag: "목마름+",
+      tagColor: "#38bdf8",
+      setCount: 10,
+      price: 600,
+      image: strawberryMilkImage,
+      detailImage: strawberryMilkImage,
+      consumeStats: [
+        { label: "배고픔", value: "+600" },
+        { label: "목마름", value: "+4200" },
+        { label: "경험치", value: "+17" },
+        { label: "섭취시간", value: "3.5초" }
+      ],
+      buffStats: [],
+      description: "우유에 딸기 향을 더한 달콤한 음료다."
+    },
+    {
+      id: 9,
+      category: "restore",
+      name: "밀크티",
+      tag: "체력회복+",
+      tagColor: "#34d399",
+      setCount: 8,
+      price: 1000,
+      image: milkTeaImage,
+      detailImage: milkTeaImage,
+      consumeStats: [
+        { label: "목마름", value: "+5120" },
+        { label: "섭취시간", value: "3초" }
+      ],
+      buffStats: [
+        { label: "스태미나 증가", value: "17" },
+        { label: "체력 회복", value: "33초 동안 32" }
+      ],
+      description: "부드럽고 달콤하게 즐길 수 있는 시원한 밀크티다."
+    },
+    {
+      id: 7,
+      category: "restore",
+      name: "까눌레",
+      tag: "배고픔+",
+      tagColor: "#d8a95e",
+      setCount: 12,
+      price: 900,
+      image: caneleImage,
+      detailImage: caneleImage,
+      consumeStats: [
+        { label: "배고픔", value: "+2920" },
+        { label: "목마름", value: "+170" },
+        { label: "집중력", value: "+500" },
+        { label: "경험치", value: "+25" },
+        { label: "섭취시간", value: "3.5초" }
+      ],
+      buffStats: [{ label: "회복", value: "+10 / 11.5초 동안" }],
+      description: "겉은 바삭하고 속은 쫀득한 프랑스식 구움 과자입니다."
+    },
+    {
       id: 2,
+      category: "life",
       name: "프라이드 치킨",
       tag: "채광버프+",
       tagColor: "#f59e0b",
@@ -63,69 +164,8 @@ export default function App() {
       description: "바삭한 튀김옷이 매력적인 기본 프라이드 치킨이다."
     },
     {
-      id: 3,
-      name: "계란 샐러드",
-      tag: "배고픔+",
-      tagColor: "#d8a95e",
-      setCount: 6,
-      price: 400,
-      image: eggSaladImage,
-      detailImage: eggSaladImage,
-      consumeStats: [
-        { label: "배고픔", value: "+5650" },
-        { label: "목마름", value: "-150" },
-        { label: "집중력", value: "+400" },
-        { label: "경험치", value: "+17" },
-        { label: "섭취시간", value: "5.5초" }
-      ],
-      buffStats: [
-        { label: "지속시간", value: "1분 18초" },
-        { label: "스태미나 재생 증가", value: "10" }
-      ],
-      description: "잘게 썬 삶은 계란을 크리미하게 버무린 샐러드다."
-    },
-    {
-      id: 4,
-      name: "계란 마요 토스트",
-      tag: "벌목버프+",
-      tagColor: "#22c55e",
-      setCount: 6,
-      price: 700,
-      image: eggMayoToastImage,
-      detailImage: eggMayoToastImage,
-      consumeStats: [
-        { label: "배고픔", value: "+5650" },
-        { label: "목마름", value: "-150" },
-        { label: "집중력", value: "+400" },
-        { label: "경험치", value: "+31" },
-        { label: "섭취시간", value: "6초" }
-      ],
-      buffStats: [
-        { label: "지속시간", value: "4분" },
-        { label: "벌목 시간 감소", value: "6%" }
-      ],
-      description: "계란 마요를 듬뿍 올린 든든한 한 조각 토스트다."
-    },
-    {
-      id: 5,
-      name: "무난한 딸기우유",
-      tag: "목마름+",
-      tagColor: "#38bdf8",
-      setCount: 10,
-      price: 600,
-      image: strawberryMilkImage,
-      detailImage: strawberryMilkImage,
-      consumeStats: [
-        { label: "배고픔", value: "+600" },
-        { label: "목마름", value: "+4200" },
-        { label: "경험치", value: "+17" },
-        { label: "섭취시간", value: "3.5초" }
-      ],
-      buffStats: [],
-      description: "우유에 딸기 향을 더한 달콤한 음료다."
-    },
-    {
       id: 6,
+      category: "life",
       name: "브라우니",
       tag: "채광버프+",
       tagColor: "#f59e0b",
@@ -147,26 +187,31 @@ export default function App() {
       description: "꾸덕한 초콜릿 향이 진하게 느껴지는 브라우니다."
     },
     {
-      id: 7,
-      name: "까눌레",
-      tag: "배고픔+",
-      tagColor: "#d8a95e",
-      setCount: 12,
-      price: 900,
-      image: caneleImage,
-      detailImage: caneleImage,
+      id: 4,
+      category: "life",
+      name: "계란 마요 토스트",
+      tag: "벌목버프+",
+      tagColor: "#22c55e",
+      setCount: 6,
+      price: 700,
+      image: eggMayoToastImage,
+      detailImage: eggMayoToastImage,
       consumeStats: [
-        { label: "배고픔", value: "+2920" },
-        { label: "목마름", value: "+170" },
-        { label: "집중력", value: "+500" },
-        { label: "경험치", value: "+25" },
-        { label: "섭취시간", value: "3.5초" }
+        { label: "배고픔", value: "+5650" },
+        { label: "목마름", value: "-150" },
+        { label: "집중력", value: "+400" },
+        { label: "경험치", value: "+31" },
+        { label: "섭취시간", value: "6초" }
       ],
-      buffStats: [{ label: "회복", value: "+10 / 11.5초 동안" }],
-      description: "겉은 바삭하고 속은 쫀득한 프랑스식 구움 과자입니다."
+      buffStats: [
+        { label: "지속시간", value: "4분" },
+        { label: "벌목 시간 감소", value: "6%" }
+      ],
+      description: "계란 마요를 듬뿍 올린 든든한 한 조각 토스트다."
     },
     {
       id: 8,
+      category: "life",
       name: "마카롱",
       tag: "낚시버프+",
       tagColor: "#a78bfa",
@@ -188,48 +233,30 @@ export default function App() {
       ],
       description: "알록달록한 껍질 사이에 크림을 채운 한입 디저트다."
     },
-   {
-  id: 9,
-  name: "밀크티",
-  tag: "체력회복+",
-  tagColor: "#34d399",
-  setCount: 8,
-  price: 1000,
-  image: milkTeaImage,
-  detailImage: milkTeaImage,
-  consumeStats: [
-    { label: "목마름", value: "+5120" },
-    { label: "섭취시간", value: "3초" }
-  ],
-  buffStats: [
-    { label: "스태미나 증가", value: "17" },
-    { label: "체력 회복", value: "33초 동안 32" }
-  ],
-  description: "부드럽고 달콤하게 즐길 수 있는 시원한 밀크티다."
-},
     {
-  id: 10,
-  name: "아이스 마끼아또",
-  tag: "이동속도+",
-  tagColor: "#60a5fa",
-  setCount: 10,
-  price: 2000,
-  image: icedMacchiatoImage,
-  detailImage: icedMacchiatoImage,
-  consumeStats: [
-    { label: "배고픔", value: "+570" },
-    { label: "목마름", value: "+4520" },
-    { label: "집중력", value: "+500" },
-    { label: "경험치", value: "+81" },
-    { label: "섭취시간", value: "3초" }
-  ],
-  buffStats: [
-    { label: "지속시간", value: "2분 18초" },
-    { label: "이동 속도 증가", value: "6%" },
-    { label: "전력질주 소모 스태미나 감소", value: "4" }
-  ],
-  description: "시원하게 즐기는 아이스 마끼아또다."
-}
+      id: 10,
+      category: "combat",
+      name: "아이스 마끼아또",
+      tag: "이동속도+",
+      tagColor: "#60a5fa",
+      setCount: 10,
+      price: 2000,
+      image: icedMacchiatoImage,
+      detailImage: icedMacchiatoImage,
+      consumeStats: [
+        { label: "배고픔", value: "+570" },
+        { label: "목마름", value: "+4520" },
+        { label: "집중력", value: "+500" },
+        { label: "경험치", value: "+81" },
+        { label: "섭취시간", value: "3초" }
+      ],
+      buffStats: [
+        { label: "지속시간", value: "2분 18초" },
+        { label: "이동 속도 증가", value: "6%" },
+        { label: "전력질주 소모 스태미나 감소", value: "4" }
+      ],
+      description: "시원하게 즐기는 아이스 마끼아또다."
+    }
   ];
 
   const [cart, setCart] = useState([]);
@@ -248,6 +275,13 @@ export default function App() {
     contact: "",
     memo: ""
   });
+
+  const groupedProducts = useMemo(() => {
+    return CATEGORY_CONFIG.map((category) => ({
+      ...category,
+      products: PRODUCTS.filter((product) => product.category === category.key)
+    })).filter((category) => category.products.length > 0);
+  }, []);
 
   const formatPrice = (value) => `${Number(value).toLocaleString()}원`;
 
@@ -503,7 +537,7 @@ export default function App() {
                 display: "flex",
                 alignItems: "center",
                 gap: "16px",
-                marginBottom: "22px"
+                marginBottom: "26px"
               }}
             >
               <h2
@@ -528,196 +562,250 @@ export default function App() {
               />
             </div>
 
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-                gap: "20px"
-              }}
-            >
-              {PRODUCTS.map((product) => (
-                <div
-                  key={product.id}
-                  style={{
-                    border: "1px solid rgba(191,145,79,0.22)",
-                    borderRadius: "18px",
-                    padding: "18px",
-                    background:
-                      "linear-gradient(180deg, rgba(16,24,39,0.92) 0%, rgba(17,24,39,0.98) 100%)",
-                    boxShadow: "0 12px 24px rgba(0,0,0,0.18)"
-                  }}
-                >
+            <div style={{ display: "flex", flexDirection: "column", gap: "34px" }}>
+              {groupedProducts.map((group) => (
+                <section key={group.key}>
                   <div
                     style={{
-                      position: "relative",
-                      width: "100%",
-                      height: "180px",
-                      borderRadius: "14px",
-                      overflow: "hidden",
-                      marginBottom: "14px",
-                      backgroundColor: "#0f172a",
-                      border: "1px solid rgba(191,145,79,0.16)"
+                      marginBottom: "18px",
+                      padding: "0 4px"
                     }}
                   >
                     <div
                       style={{
-                        position: "absolute",
-                        top: "10px",
-                        left: "10px",
-                        zIndex: 2,
-                        padding: "7px 11px",
-                        borderRadius: "999px",
-                        backgroundColor: product.tagColor,
-                        color: "#111827",
-                        fontSize: "12px",
-                        fontWeight: "800",
-                        letterSpacing: "-0.01em",
-                        boxShadow: "0 8px 18px rgba(0,0,0,0.22)"
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "14px",
+                        marginBottom: "6px"
                       }}
                     >
-                      {product.tag}
+                      <h3
+                        style={{
+                          margin: 0,
+                          fontSize: "28px",
+                          fontWeight: "800",
+                          letterSpacing: "-0.03em",
+                          color: "#f8fafc"
+                        }}
+                      >
+                        {group.title}
+                      </h3>
+
+                      <div
+                        style={{
+                          flex: 1,
+                          height: "1px",
+                          background:
+                            "linear-gradient(90deg, rgba(191,145,79,0.45) 0%, rgba(191,145,79,0.08) 100%)"
+                        }}
+                      />
                     </div>
 
-                    <img
-                      src={product.image}
-                      alt={product.name}
+                    <p
                       style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover"
+                        margin: 0,
+                        color: "#aeb9c8",
+                        fontSize: "14px",
+                        lineHeight: 1.6
                       }}
-                    />
+                    >
+                      {group.description}
+                    </p>
                   </div>
-
-                  <h3
-                    className="notranslate"
-                    style={{
-                      margin: "0 0 10px 0",
-                      fontSize: "24px",
-                      fontWeight: "800",
-                      letterSpacing: "-0.02em"
-                    }}
-                  >
-                    {product.name}
-                  </h3>
-
-                  <p
-                    style={{
-                      margin: "6px 0",
-                      color: "#cbd5e1",
-                      fontSize: "15px"
-                    }}
-                  >
-                    1세트 {product.setCount}ea
-                  </p>
-
-                  <p
-                    style={{
-                      margin: "6px 0 18px 0",
-                      fontWeight: "800",
-                      fontSize: "30px",
-                      color: "#d8a95e",
-                      letterSpacing: "-0.02em"
-                    }}
-                  >
-                    {formatPrice(product.price)}
-                  </p>
 
                   <div
                     style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "10px",
-                      marginBottom: "15px"
+                      display: "grid",
+                      gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+                      gap: "20px"
                     }}
                   >
-                    <button
-                      onClick={() => changeSelectedQuantity(product.id, -1)}
-                      style={{
-                        width: "38px",
-                        height: "38px",
-                        borderRadius: "10px",
-                        border: "1px solid rgba(191,145,79,0.22)",
-                        background: "#111827",
-                        color: "#fff",
-                        cursor: "pointer",
-                        fontSize: "18px"
-                      }}
-                    >
-                      -
-                    </button>
+                    {group.products.map((product) => (
+                      <div
+                        key={product.id}
+                        style={{
+                          border: "1px solid rgba(191,145,79,0.22)",
+                          borderRadius: "18px",
+                          padding: "18px",
+                          background:
+                            "linear-gradient(180deg, rgba(16,24,39,0.92) 0%, rgba(17,24,39,0.98) 100%)",
+                          boxShadow: "0 12px 24px rgba(0,0,0,0.18)"
+                        }}
+                      >
+                        <div
+                          style={{
+                            position: "relative",
+                            width: "100%",
+                            height: "180px",
+                            borderRadius: "14px",
+                            overflow: "hidden",
+                            marginBottom: "14px",
+                            backgroundColor: "#0f172a",
+                            border: "1px solid rgba(191,145,79,0.16)"
+                          }}
+                        >
+                          <div
+                            style={{
+                              position: "absolute",
+                              top: "10px",
+                              left: "10px",
+                              zIndex: 2,
+                              padding: "7px 11px",
+                              borderRadius: "999px",
+                              backgroundColor: product.tagColor,
+                              color: "#111827",
+                              fontSize: "12px",
+                              fontWeight: "800",
+                              letterSpacing: "-0.01em",
+                              boxShadow: "0 8px 18px rgba(0,0,0,0.22)"
+                            }}
+                          >
+                            {product.tag}
+                          </div>
 
-                    <div
-                      style={{
-                        flex: 1,
-                        minWidth: "70px",
-                        textAlign: "center",
-                        fontWeight: "700",
-                        fontSize: "15px",
-                        padding: "10px 12px",
-                        borderRadius: "10px",
-                        backgroundColor: "#111827",
-                        border: "1px solid rgba(191,145,79,0.12)"
-                      }}
-                    >
-                      {selectedQuantities[product.id]}세트
-                    </div>
+                          <img
+                            src={product.image}
+                            alt={product.name}
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              objectFit: "cover"
+                            }}
+                          />
+                        </div>
 
-                    <button
-                      onClick={() => changeSelectedQuantity(product.id, 1)}
-                      style={{
-                        width: "38px",
-                        height: "38px",
-                        borderRadius: "10px",
-                        border: "1px solid rgba(191,145,79,0.22)",
-                        background: "#111827",
-                        color: "#fff",
-                        cursor: "pointer",
-                        fontSize: "18px"
-                      }}
-                    >
-                      +
-                    </button>
+                        <h3
+                          className="notranslate"
+                          style={{
+                            margin: "0 0 10px 0",
+                            fontSize: "24px",
+                            fontWeight: "800",
+                            letterSpacing: "-0.02em"
+                          }}
+                        >
+                          {product.name}
+                        </h3>
+
+                        <p
+                          style={{
+                            margin: "6px 0",
+                            color: "#cbd5e1",
+                            fontSize: "15px"
+                          }}
+                        >
+                          1세트 {product.setCount}ea
+                        </p>
+
+                        <p
+                          style={{
+                            margin: "6px 0 18px 0",
+                            fontWeight: "800",
+                            fontSize: "30px",
+                            color: "#d8a95e",
+                            letterSpacing: "-0.02em"
+                          }}
+                        >
+                          {formatPrice(product.price)}
+                        </p>
+
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "10px",
+                            marginBottom: "15px"
+                          }}
+                        >
+                          <button
+                            onClick={() => changeSelectedQuantity(product.id, -1)}
+                            style={{
+                              width: "38px",
+                              height: "38px",
+                              borderRadius: "10px",
+                              border: "1px solid rgba(191,145,79,0.22)",
+                              background: "#111827",
+                              color: "#fff",
+                              cursor: "pointer",
+                              fontSize: "18px"
+                            }}
+                          >
+                            -
+                          </button>
+
+                          <div
+                            style={{
+                              flex: 1,
+                              minWidth: "70px",
+                              textAlign: "center",
+                              fontWeight: "700",
+                              fontSize: "15px",
+                              padding: "10px 12px",
+                              borderRadius: "10px",
+                              backgroundColor: "#111827",
+                              border: "1px solid rgba(191,145,79,0.12)"
+                            }}
+                          >
+                            {selectedQuantities[product.id]}세트
+                          </div>
+
+                          <button
+                            onClick={() => changeSelectedQuantity(product.id, 1)}
+                            style={{
+                              width: "38px",
+                              height: "38px",
+                              borderRadius: "10px",
+                              border: "1px solid rgba(191,145,79,0.22)",
+                              background: "#111827",
+                              color: "#fff",
+                              cursor: "pointer",
+                              fontSize: "18px"
+                            }}
+                          >
+                            +
+                          </button>
+                        </div>
+
+                        <div style={{ display: "flex", gap: "10px" }}>
+                          <button
+                            onClick={() => addToCart(product)}
+                            style={{
+                              flex: 1,
+                              padding: "12px 14px",
+                              borderRadius: "12px",
+                              border: "none",
+                              background:
+                                "linear-gradient(180deg, #d7aa63 0%, #bf914f 100%)",
+                              color: "#111827",
+                              cursor: "pointer",
+                              fontWeight: "800",
+                              fontSize: "15px",
+                              boxShadow: "0 8px 18px rgba(191,145,79,0.22)"
+                            }}
+                          >
+                            담기
+                          </button>
+
+                          <button
+                            onClick={() => setSelectedProduct(product)}
+                            style={{
+                              flex: 1,
+                              padding: "12px 14px",
+                              borderRadius: "12px",
+                              border: "1px solid rgba(191,145,79,0.24)",
+                              backgroundColor: "#111827",
+                              color: "#f8fafc",
+                              cursor: "pointer",
+                              fontWeight: "700",
+                              fontSize: "15px"
+                            }}
+                          >
+                            상세보기
+                          </button>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-
-                  <div style={{ display: "flex", gap: "10px" }}>
-                    <button
-                      onClick={() => addToCart(product)}
-                      style={{
-                        flex: 1,
-                        padding: "12px 14px",
-                        borderRadius: "12px",
-                        border: "none",
-                        background:
-                          "linear-gradient(180deg, #d7aa63 0%, #bf914f 100%)",
-                        color: "#111827",
-                        cursor: "pointer",
-                        fontWeight: "800",
-                        fontSize: "15px",
-                        boxShadow: "0 8px 18px rgba(191,145,79,0.22)"
-                      }}
-                    >
-                      담기
-                    </button>
-
-                    <button
-                      onClick={() => setSelectedProduct(product)}
-                      style={{
-                        flex: 1,
-                        padding: "12px 14px",
-                        borderRadius: "12px",
-                        border: "1px solid rgba(191,145,79,0.24)",
-                        backgroundColor: "#111827",
-                        color: "#f8fafc",
-                        cursor: "pointer",
-                        fontWeight: "700",
-                        fontSize: "15px"
-                      }}
-                    >
-                      상세보기
-                    </button>
-                  </div>
-                </div>
+                </section>
               ))}
             </div>
           </div>
