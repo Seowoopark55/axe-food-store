@@ -306,6 +306,8 @@ export default function App() {
 
   return (
     <div
+      translate="no"
+      className="notranslate"
       style={{
         background:
           "radial-gradient(circle at top, #12203a 0%, #0b1120 42%, #070c16 100%)",
@@ -389,6 +391,7 @@ export default function App() {
                 </div>
 
                 <h1
+                  className="notranslate"
                   style={{
                     margin: 0,
                     fontSize: "86px",
@@ -436,6 +439,7 @@ export default function App() {
                 </div>
 
                 <p
+                  className="notranslate"
                   style={{
                     margin: "20px 0 0 0",
                     color: "#d7b37a",
@@ -541,6 +545,7 @@ export default function App() {
                   </div>
 
                   <h3
+                    className="notranslate"
                     style={{
                       margin: "0 0 10px 0",
                       fontSize: "24px",
@@ -774,6 +779,7 @@ export default function App() {
                             }}
                           >
                             <div
+                              className="notranslate"
                               style={{
                                 fontWeight: "800",
                                 fontSize: "15px",
@@ -982,6 +988,7 @@ export default function App() {
                     }}
                   >
                     <h2
+                      className="notranslate"
                       style={{
                         margin: 0,
                         fontSize: "34px",
