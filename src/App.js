@@ -8,6 +8,8 @@ import strawberryMilkImage from "./strawberry_milk.png";
 import brownieImage from "./brownie.png";
 import caneleImage from "./Canele.png";
 import macaronImage from "./macaron.png";
+import milkTeaImage from "./milk_tea.png";
+import icedMacchiatoImage from "./iced_macchiato.png";
 import axePosterImage from "./axe_poster.png";
 
 export default function App() {
@@ -184,6 +186,47 @@ export default function App() {
         { label: "낚시 2배 획득 확률", value: "+0.8%" }
       ],
       description: "알록달록한 껍질 사이에 크림을 채운 한입 디저트다."
+    },
+    {
+      id: 9,
+      name: "밀크티",
+      tag: "목마름+",
+      tagColor: "#38bdf8",
+      setCount: 8,
+      price: 1000,
+      image: milkTeaImage,
+      detailImage: milkTeaImage,
+      consumeStats: [
+        { label: "배고픔", value: "+300" },
+        { label: "목마름", value: "+4800" },
+        { label: "집중력", value: "+300" },
+        { label: "경험치", value: "+20" },
+        { label: "섭취시간", value: "3.5초" }
+      ],
+      buffStats: [],
+      description: "달콤하고 부드러운 풍미가 느껴지는 시원한 밀크티다."
+    },
+    {
+      id: 10,
+      name: "아이스 마끼아또",
+      tag: "집중력+",
+      tagColor: "#60a5fa",
+      setCount: 10,
+      price: 2000,
+      image: icedMacchiatoImage,
+      detailImage: icedMacchiatoImage,
+      consumeStats: [
+        { label: "배고픔", value: "+200" },
+        { label: "목마름", value: "+5200" },
+        { label: "집중력", value: "+900" },
+        { label: "경험치", value: "+35" },
+        { label: "섭취시간", value: "3초" }
+      ],
+      buffStats: [
+        { label: "지속시간", value: "5분" },
+        { label: "집중력 증가", value: "+10%" }
+      ],
+      description: "진한 커피와 부드러운 우유가 어우러진 시원한 마끼아또다."
     }
   ];
 
