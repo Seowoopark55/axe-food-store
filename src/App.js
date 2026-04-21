@@ -614,13 +614,14 @@ export default function App() {
                   </div>
 
                   <div
-                    style={{
-                      display: "grid",
-                      gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-                      gap: "20px",
-                      alignItems: "start"
-                    }}
-                  >
+  style={{
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(220px, 320px))",
+    gap: "20px",
+    alignItems: "start",
+    justifyContent: "start"
+  }}
+>
                     {group.products.map((product) => (
                       <div
                         key={product.id}
