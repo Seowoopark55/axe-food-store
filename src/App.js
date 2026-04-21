@@ -532,35 +532,7 @@ export default function App() {
               </div>
             </div>
 
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "16px",
-                marginBottom: "26px"
-              }}
-            >
-              <h2
-                style={{
-                  margin: 0,
-                  fontSize: "38px",
-                  fontWeight: "800",
-                  color: "#f8fafc",
-                  letterSpacing: "-0.03em"
-                }}
-              >
-                FOOD MENU
-              </h2>
-
-              <div
-                style={{
-                  flex: 1,
-                  height: "1px",
-                  background:
-                    "linear-gradient(90deg, rgba(191,145,79,0.75) 0%, rgba(191,145,79,0.16) 36%, rgba(51,65,85,0.18) 100%)"
-                }}
-              />
-            </div>
+<div style={{ marginBottom: "10px" }} />
 
             <div style={{ display: "flex", flexDirection: "column", gap: "34px" }}>
               {groupedProducts.map((group) => (
