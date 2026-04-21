@@ -100,26 +100,6 @@ export default function App() {
       description: "우유에 딸기 향을 더한 달콤한 음료다."
     },
     {
-      id: 9,
-      category: "combat",
-      name: "밀크티",
-      tag: "체력회복+",
-      tagColor: "#34d399",
-      setCount: 8,
-      price: 1000,
-      image: milkTeaImage,
-      detailImage: milkTeaImage,
-      consumeStats: [
-        { label: "목마름", value: "+5120" },
-        { label: "섭취시간", value: "3초" }
-      ],
-      buffStats: [
-        { label: "스태미나 증가", value: "17" },
-        { label: "체력 회복", value: "33초 동안 32" }
-      ],
-      description: "부드럽고 달콤하게 즐길 수 있는 시원한 밀크티다."
-    },
-    {
       id: 7,
       category: "restore",
       name: "까눌레",
@@ -232,6 +212,26 @@ export default function App() {
         { label: "낚시 2배 획득 확률", value: "+0.8%" }
       ],
       description: "알록달록한 껍질 사이에 크림을 채운 한입 디저트다."
+    },
+    {
+      id: 9,
+      category: "combat",
+      name: "밀크티",
+      tag: "체력회복+",
+      tagColor: "#34d399",
+      setCount: 8,
+      price: 1000,
+      image: milkTeaImage,
+      detailImage: milkTeaImage,
+      consumeStats: [
+        { label: "목마름", value: "+5120" },
+        { label: "섭취시간", value: "3초" }
+      ],
+      buffStats: [
+        { label: "스태미나 증가", value: "17" },
+        { label: "체력 회복", value: "33초 동안 32" }
+      ],
+      description: "부드럽고 달콤하게 즐길 수 있는 시원한 밀크티다."
     },
     {
       id: 10,
@@ -399,7 +399,7 @@ export default function App() {
         style={{
           fontFamily: "'Pretendard', 'Noto Sans KR', Arial, sans-serif",
           padding: "30px",
-          maxWidth: "1500px",
+          maxWidth: "1680px",
           margin: "0 auto"
         }}
       >
@@ -614,12 +614,13 @@ export default function App() {
                   </div>
 
                   <div
-  style={{
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(260px, 320px))",
-    gap: "20px"
-  }}
->
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+                      gap: "20px",
+                      alignItems: "start"
+                    }}
+                  >
                     {group.products.map((product) => (
                       <div
                         key={product.id}
