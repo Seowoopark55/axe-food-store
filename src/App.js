@@ -34,7 +34,7 @@ export default function App() {
         { label: "지속시간", value: "48초" },
         { label: "스태미나 재생 증가", value: "20" },
         
-        { label: "전력질주 소모 스태미나 감소", value: "2" }
+        { label: "전력질주 소모 스태미나 감소", value: "-2" }
       ],
       description:
         "뜨거운 물에 끓여 간편하게 즐길 수 있는 매콤한 기본 라면이다."
