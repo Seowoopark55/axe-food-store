@@ -535,9 +535,21 @@ export default function App() {
 
 <div style={{ marginBottom: "10px" }} />
 
-            <div style={{ display: "flex", flexDirection: "column", gap: "34px" }}>
+            <div
+  style={{
+    display: "flex",
+    flexDirection: "column",
+    gap: "34px",
+    alignItems: "center"
+  }}
+>
               {groupedProducts.map((group) => (
-                <section key={group.key}>
+                <section
+  key={group.key}
+  style={{
+    width: "1180px"
+  }}
+>
                   <div
                     style={{
                       marginBottom: "18px",
@@ -586,13 +598,12 @@ export default function App() {
                     </p>
                   </div>
 
-                  <div
+                 <div
   style={{
     display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(220px, 280px))",
+    gridTemplateColumns: "repeat(4, 1fr)",
     gap: "20px",
-    alignItems: "start",
-    justifyContent: "start"
+    alignItems: "start"
   }}
 >
                     {group.products.map((product) => (
