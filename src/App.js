@@ -532,7 +532,44 @@ export default function App() {
                 </p>
               </div>
             </div>
+<div
+  style={{
+    maxWidth: "1200px",
+    margin: "24px auto 0",
+    borderRadius: "18px",
+    padding: "20px 24px",
+    background: "rgba(15, 23, 42, 0.85)",
+    border: "1px solid rgba(191,145,79,0.18)",
+    boxShadow: "0 12px 24px rgba(0,0,0,0.18)",
+    textAlign: "center"
+  }}
+>
+  <h3
+    style={{
+      margin: "0 0 12px 0",
+      fontSize: "22px",
+      fontWeight: "800",
+      color: "#f8fafc"
+    }}
+  >
+    운영시간 안내
+  </h3>
 
+  <p
+    style={{
+      margin: 0,
+      color: "#cbd5e1",
+      fontSize: "16px",
+      lineHeight: 1.8
+    }}
+  >
+    운영시간 14:00 ~ 22:00<br />
+  
+    ※ 운영시간 외 주문은 예약 접수로 처리됩니다.<br />
+    ※ 답변이 늦을 수 있습니다.<br />
+  
+  </p>
+</div>
 <div style={{ marginBottom: "10px" }} />
 
             <div
