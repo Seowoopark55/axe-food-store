@@ -523,7 +523,7 @@ export default function App() {
                 <div
                   style={{
   textAlign: "center",
-  paddingLeft: "350px",
+  paddingLeft: "330px",
   paddingRight: "0px"
 }}
                 >
