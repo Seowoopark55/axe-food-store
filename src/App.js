@@ -16,7 +16,7 @@ import axePosterImage from "./axe_poster.png";
 
 export default function App() {
   const SCRIPT_URL =
-    "https://script.google.com/macros/s/AKfycbzjKurN4VoiCcf-VpTSsSrHs2SVXGy79ZSop38GU2w5ysEYTmx57meEbu5VoxeFr9nnfA/exec";
+    "https://script.google.com/macros/s/AKfycbyIRQxcTrmY-G8tQqioUXZKqkSqaA7siIEcTqBqCxBRIwjWNK8PvbQ_BniXTm0hVQtg7w/exec";
 
   const STORAGE_KEYS = {
     customerName: "axe_food_customer_name",
@@ -270,7 +270,7 @@ export default function App() {
     {
       id: 11,
       category: "combat",
-      name: "분홍살 생선 조림",
+      name: "분홍살 생선조림",
       tag: "체력증가+",
       tagColor: "#ef4444",
       setCount: 4,
@@ -294,7 +294,7 @@ export default function App() {
     {
       id: 12,
       category: "combat",
-      name: "흰살 생선 조림",
+      name: "흰살 생선조림",
       tag: "체력증가+",
       tagColor: "#ef4444",
       setCount: 4,
