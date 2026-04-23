@@ -515,17 +515,17 @@ export default function App() {
                   position: "relative",
                   zIndex: 1,
                   display: "grid",
-                  gridTemplateColumns: "minmax(0, 1.38fr) 300px",
+                  gridTemplateColumns: "minmax(0, 1.42fr) 290px",
                   gap: "22px",
                   alignItems: "center"
                 }}
               >
                 <div
                   style={{
-  textAlign: "center",
-  paddingLeft: "330px",
-  paddingRight: "0px"
-}}
+                    textAlign: "center",
+                    paddingLeft: "330px",
+                    paddingRight: "0px"
+                  }}
                 >
                   <div
                     style={{
@@ -603,12 +603,13 @@ export default function App() {
 
                 <div
                   style={{
-                    borderRadius: "20px",
-                    padding: "18px 18px",
+                    borderRadius: "18px",
+                    padding: "12px 14px",
                     background: "rgba(15, 23, 42, 0.82)",
                     border: "1px solid rgba(191,145,79,0.18)",
                     boxShadow: "0 12px 24px rgba(0,0,0,0.18)",
-                    textAlign: "left"
+                    textAlign: "left",
+                    alignSelf: "center"
                   }}
                 >
                   <div
@@ -616,13 +617,13 @@ export default function App() {
                       display: "inline-flex",
                       alignItems: "center",
                       gap: "8px",
-                      padding: "8px 12px",
+                      padding: "6px 10px",
                       borderRadius: "999px",
                       backgroundColor: isLoadingStatus ? "#6b7280" : currentStatus.badgeColor,
                       color: "#111827",
-                      fontSize: "13px",
+                      fontSize: "12px",
                       fontWeight: "800",
-                      marginBottom: "12px"
+                      marginBottom: "8px"
                     }}
                   >
                     {isLoadingStatus ? "상태 확인 중..." : currentStatus.badge}
@@ -630,12 +631,12 @@ export default function App() {
 
                   <h3
                     style={{
-                      margin: "0 0 8px 0",
-                      fontSize: "22px",
+                      margin: "0 0 5px 0",
+                      fontSize: "20px",
                       fontWeight: "800",
                       color: "#f8fafc",
                       letterSpacing: "-0.03em",
-                      lineHeight: 1.35
+                      lineHeight: 1.3
                     }}
                   >
                     {isLoadingStatus ? "운영상태를 확인하고 있습니다" : storeTitle}
@@ -645,8 +646,8 @@ export default function App() {
                     style={{
                       margin: 0,
                       color: "#cbd5e1",
-                      fontSize: "14px",
-                      lineHeight: 1.7
+                      fontSize: "13px",
+                      lineHeight: 1.55
                     }}
                   >
                     {isLoadingStatus ? "잠시만 기다려 주세요." : storeMessage}
@@ -655,10 +656,10 @@ export default function App() {
                   {storeNotice && (
                     <p
                       style={{
-                        margin: "10px 0 0 0",
+                        margin: "6px 0 0 0",
                         color: "#d8b072",
-                        fontSize: "13px",
-                        lineHeight: 1.7,
+                        fontSize: "12px",
+                        lineHeight: 1.55,
                         fontWeight: "600"
                       }}
                     >
