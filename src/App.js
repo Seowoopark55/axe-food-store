@@ -303,7 +303,7 @@ export default function App() {
       badge: "예약 주문만 가능",
       badgeColor: "#f59e0b",
       title: "현재는 예약 주문만 가능합니다",
-      description: "지금 접수된 주문은 AXE FOOD 오픈시간 이후부터 순차적으로 제작됩니다.",
+      description: "지금 접수된 주문은 AXE FOOD 오픈 이후부터 순차적으로 제작됩니다.",
       allowOrder: true
     },
     CLOSED: {
