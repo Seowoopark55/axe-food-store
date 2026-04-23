@@ -713,7 +713,7 @@ export default function App() {
                         fontWeight: "600"
                       }}
                     >
-                      안내: {storeNotice}
+                      {storeNotice}
                     </p>
                   )}
                 </div>
