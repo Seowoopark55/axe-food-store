@@ -303,14 +303,14 @@ export default function App() {
       badge: "예약 주문만 가능",
       badgeColor: "#f59e0b",
       title: "현재는 예약 주문만 가능합니다",
-      description: "지금 접수된 주문은 AXE FOOD 오픈 이후부터 순차적으로 제작됩니다.",
+      description: "지금 접수된 주문은 다음날 아침부터 순차적으로 제작됩니다.",
       allowOrder: true
     },
     CLOSED: {
       badge: "주문 마감",
       badgeColor: "#ef4444",
-      title: "금일 주문이 마감되었습니다",
-      description: "현재는 주문 접수가 불가능합니다. 다음 운영시간에 다시 이용해 주세요.",
+      title: "현재 주문이 마감되었습니다",
+      description: "현재는 주문 접수가 불가능합니다.",
       allowOrder: false
     }
   };
@@ -472,7 +472,7 @@ export default function App() {
                 position: "relative",
                 overflow: "hidden",
                 borderRadius: "28px",
-                padding: "52px 38px 40px",
+                padding: "52px 38px 32px",
                 maxWidth: "1200px",
                 margin: "0 auto 34px",
                 background:
@@ -585,73 +585,76 @@ export default function App() {
                 >
                   AXE Restaurant
                 </p>
-              </div>
-            </div>
 
-            <div
-              style={{
-                maxWidth: "1200px",
-                margin: "0 auto 24px",
-                borderRadius: "18px",
-                padding: "20px 24px",
-                background: "rgba(15, 23, 42, 0.85)",
-                border: "1px solid rgba(191,145,79,0.18)",
-                boxShadow: "0 12px 24px rgba(0,0,0,0.18)",
-                textAlign: "center"
-              }}
-            >
-              <div
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  padding: "8px 12px",
-                  borderRadius: "999px",
-                  backgroundColor: isLoadingStatus ? "#6b7280" : currentStatus.badgeColor,
-                  color: "#111827",
-                  fontSize: "13px",
-                  fontWeight: "800",
-                  marginBottom: "14px"
-                }}
-              >
-                {isLoadingStatus ? "상태 확인 중..." : currentStatus.badge}
-              </div>
-
-              <h3
-                style={{
-                  margin: "0 0 10px 0",
-                  fontSize: "24px",
-                  fontWeight: "800",
-                  color: "#f8fafc"
-                }}
-              >
-                {isLoadingStatus ? "운영상태를 확인하고 있습니다" : currentStatus.title}
-              </h3>
-
-              <p
-                style={{
-                  margin: 0,
-                  color: "#cbd5e1",
-                  fontSize: "16px",
-                  lineHeight: 1.8
-                }}
-              >
-                {isLoadingStatus ? "잠시만 기다려 주세요." : currentStatus.description}
-              </p>
-
-              {storeNotice && (
-                <p
+                <div
                   style={{
-                    margin: "12px 0 0 0",
-                    color: "#d8b072",
-                    fontSize: "15px",
-                    lineHeight: 1.7,
-                    fontWeight: "600"
+                    marginTop: "28px",
+                    maxWidth: "760px",
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                    borderRadius: "18px",
+                    padding: "18px 22px",
+                    background: "rgba(15, 23, 42, 0.78)",
+                    border: "1px solid rgba(191,145,79,0.18)",
+                    boxShadow: "0 12px 24px rgba(0,0,0,0.18)",
+                    textAlign: "center"
                   }}
                 >
-                  안내: {storeNotice}
-                </p>
-              )}
+                  <div
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: "8px",
+                      padding: "8px 12px",
+                      borderRadius: "999px",
+                      backgroundColor: isLoadingStatus ? "#6b7280" : currentStatus.badgeColor,
+                      color: "#111827",
+                      fontSize: "13px",
+                      fontWeight: "800",
+                      marginBottom: "12px"
+                    }}
+                  >
+                    {isLoadingStatus ? "상태 확인 중..." : currentStatus.badge}
+                  </div>
+
+                  <h3
+                    style={{
+                      margin: "0 0 8px 0",
+                      fontSize: "24px",
+                      fontWeight: "800",
+                      color: "#f8fafc",
+                      letterSpacing: "-0.03em"
+                    }}
+                  >
+                    {isLoadingStatus ? "운영상태를 확인하고 있습니다" : currentStatus.title}
+                  </h3>
+
+                  <p
+                    style={{
+                      margin: 0,
+                      color: "#cbd5e1",
+                      fontSize: "15px",
+                      lineHeight: 1.75
+                    }}
+                  >
+                    {isLoadingStatus ? "잠시만 기다려 주세요." : currentStatus.description}
+                  </p>
+
+                  {storeNotice && (
+                    <p
+                      style={{
+                        margin: "10px 0 0 0",
+                        color: "#d8b072",
+                        fontSize: "14px",
+                        lineHeight: 1.7,
+                        fontWeight: "600"
+                      }}
+                    >
+                      안내: {storeNotice}
+                    </p>
+                  )}
+                </div>
+              </div>
             </div>
 
             <div style={{ marginBottom: "10px" }} />
