@@ -16,7 +16,7 @@ import axePosterImage from "./axe_poster.png";
 
 export default function App() {
   const SCRIPT_URL =
-    "https://script.google.com/macros/s/AKfycbyIRQxcTrmY-G8tQqioUXZKqkSqaA7siIEcTqBqCxBRIwjWNK8PvbQ_BniXTm0hVQtg7w/exec";
+    "https://script.google.com/macros/s/AKfycbxEQzdiE00cgTxFKMl-Sb8P5m8GbkeClYsFr8hIgcwslPhk3npJkZDs_qjgPpPvvn0SDw/exec";
 
   const STORAGE_KEYS = {
     customerName: "axe_food_customer_name",
