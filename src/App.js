@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 
 import ramenImage from "./ramen.png";
 import friedChickenImage from "./fried_chicken.png";
@@ -13,6 +13,9 @@ import icedMacchiatoImage from "./iced_macchiato.png";
 import axePosterImage from "./axe_poster.png";
 
 export default function App() {
+  const SCRIPT_URL =
+    "https://script.google.com/macros/s/AKfycbxDzrVMpbAw18cThxqWq5fzBahX8B-vtN-zQ5lxysEa_c6KZ2kqyFXnxhveLtLYVUzynw/exec";
+
   const CATEGORY_CONFIG = [
     {
       key: "restore",
@@ -275,6 +278,9 @@ export default function App() {
     contact: "",
     memo: ""
   });
+  const [storeStatus, setStoreStatus] = useState("OPEN");
+  const [storeNotice, setStoreNotice] = useState("");
+  const [isLoadingStatus, setIsLoadingStatus] = useState(true);
 
   const groupedProducts = useMemo(() => {
     return CATEGORY_CONFIG.map((category) => ({
@@ -284,6 +290,58 @@ export default function App() {
   }, []);
 
   const formatPrice = (value) => `${Number(value).toLocaleString()}원`;
+
+  const statusConfig = {
+    OPEN: {
+      badge: "현재 주문 가능",
+      badgeColor: "#22c55e",
+      title: "지금 주문 가능합니다",
+      description: "즉시 제작 및 전달이 가능합니다.",
+      allowOrder: true
+    },
+    RESERVE: {
+      badge: "예약 주문만 가능",
+      badgeColor: "#f59e0b",
+      title: "현재는 예약 주문만 가능합니다",
+      description: "지금 접수된 주문은 다음날 아침부터 순차적으로 제작됩니다.",
+      allowOrder: true
+    },
+    CLOSED: {
+      badge: "주문 마감",
+      badgeColor: "#ef4444",
+      title: "금일 주문이 마감되었습니다",
+      description: "현재는 주문 접수가 불가능합니다. 다음 운영시간에 다시 이용해 주세요.",
+      allowOrder: false
+    }
+  };
+
+  const currentStatus = statusConfig[storeStatus] || statusConfig.OPEN;
+
+  useEffect(() => {
+    const fetchStoreStatus = async () => {
+      try {
+        setIsLoadingStatus(true);
+        const response = await fetch(SCRIPT_URL);
+        const data = await response.json();
+
+        if (data.result === "success") {
+          setStoreStatus((data.status || "OPEN").toUpperCase());
+          setStoreNotice(data.notice || "");
+        } else {
+          setStoreStatus("OPEN");
+          setStoreNotice("");
+        }
+      } catch (error) {
+        console.error(error);
+        setStoreStatus("OPEN");
+        setStoreNotice("");
+      } finally {
+        setIsLoadingStatus(false);
+      }
+    };
+
+    fetchStoreStatus();
+  }, []);
 
   const changeSelectedQuantity = (id, amount) => {
     setSelectedQuantities((prev) => ({
@@ -338,7 +396,7 @@ export default function App() {
   }, [cart]);
 
   const submitOrder = async () => {
-    if (isSubmitting || cart.length === 0) return;
+    if (isSubmitting || cart.length === 0 || !currentStatus.allowOrder) return;
 
     const orderData = {
       customerName: orderInfo.customerName.trim(),
@@ -355,17 +413,14 @@ export default function App() {
     try {
       setIsSubmitting(true);
 
-      await fetch(
-        "https://script.google.com/macros/s/AKfycbyFwzEOmbiqqt_cKjPvzSYgo60XNCuFHYs7WoGyqSyHYO5vt_ur-oI0jEwsl52hyk1Img/exec",
-        {
-          method: "POST",
-          mode: "no-cors",
-          headers: {
-            "Content-Type": "text/plain;charset=utf-8"
-          },
-          body: JSON.stringify(orderData)
-        }
-      );
+      await fetch(SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8"
+        },
+        body: JSON.stringify(orderData)
+      });
 
       setCart([]);
       setOrderInfo({
@@ -413,14 +468,14 @@ export default function App() {
         >
           <div>
             <div
-  style={{
-    position: "relative",
-    overflow: "hidden",
-    borderRadius: "28px",
-    padding: "52px 38px 40px",
-    maxWidth: "1200px",
-    margin: "0 auto 34px",
-    background:
+              style={{
+                position: "relative",
+                overflow: "hidden",
+                borderRadius: "28px",
+                padding: "52px 38px 40px",
+                maxWidth: "1200px",
+                margin: "0 auto 34px",
+                background:
                   "linear-gradient(180deg, rgba(10,16,30,0.94) 0%, rgba(9,17,32,0.96) 100%)",
                 border: "1px solid rgba(191,145,79,0.22)",
                 boxShadow: "0 18px 50px rgba(0,0,0,0.35)"
@@ -532,61 +587,90 @@ export default function App() {
                 </p>
               </div>
             </div>
-<div
-  style={{
-    maxWidth: "1200px",
-    margin: "24px auto 0",
-    borderRadius: "18px",
-    padding: "20px 24px",
-    background: "rgba(15, 23, 42, 0.85)",
-    border: "1px solid rgba(191,145,79,0.18)",
-    boxShadow: "0 12px 24px rgba(0,0,0,0.18)",
-    textAlign: "center"
-  }}
->
-  <h3
-    style={{
-      margin: "0 0 12px 0",
-      fontSize: "22px",
-      fontWeight: "800",
-      color: "#f8fafc"
-    }}
-  >
-    운영시간 안내
-  </h3>
-
-  <p
-    style={{
-      margin: 0,
-      color: "#cbd5e1",
-      fontSize: "16px",
-      lineHeight: 1.8
-    }}
-  >
-    14:00 ~ 22:00<br />
-  
-    ※ 운영시간 외 주문은 예약 접수로 처리됩니다.<br />
-    ※ 답변이 늦을 수 있습니다.<br />
-  
-  </p>
-</div>
-<div style={{ marginBottom: "10px" }} />
 
             <div
-  style={{
-    display: "flex",
-    flexDirection: "column",
-    gap: "34px",
-    alignItems: "center"
-  }}
->
+              style={{
+                maxWidth: "1200px",
+                margin: "0 auto 24px",
+                borderRadius: "18px",
+                padding: "20px 24px",
+                background: "rgba(15, 23, 42, 0.85)",
+                border: "1px solid rgba(191,145,79,0.18)",
+                boxShadow: "0 12px 24px rgba(0,0,0,0.18)",
+                textAlign: "center"
+              }}
+            >
+              <div
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  padding: "8px 12px",
+                  borderRadius: "999px",
+                  backgroundColor: isLoadingStatus ? "#6b7280" : currentStatus.badgeColor,
+                  color: "#111827",
+                  fontSize: "13px",
+                  fontWeight: "800",
+                  marginBottom: "14px"
+                }}
+              >
+                {isLoadingStatus ? "상태 확인 중..." : currentStatus.badge}
+              </div>
+
+              <h3
+                style={{
+                  margin: "0 0 10px 0",
+                  fontSize: "24px",
+                  fontWeight: "800",
+                  color: "#f8fafc"
+                }}
+              >
+                {isLoadingStatus ? "운영상태를 확인하고 있습니다" : currentStatus.title}
+              </h3>
+
+              <p
+                style={{
+                  margin: 0,
+                  color: "#cbd5e1",
+                  fontSize: "16px",
+                  lineHeight: 1.8
+                }}
+              >
+                {isLoadingStatus ? "잠시만 기다려 주세요." : currentStatus.description}
+              </p>
+
+              {storeNotice && (
+                <p
+                  style={{
+                    margin: "12px 0 0 0",
+                    color: "#d8b072",
+                    fontSize: "15px",
+                    lineHeight: 1.7,
+                    fontWeight: "600"
+                  }}
+                >
+                  안내: {storeNotice}
+                </p>
+              )}
+            </div>
+
+            <div style={{ marginBottom: "10px" }} />
+
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "34px",
+                alignItems: "center"
+              }}
+            >
               {groupedProducts.map((group) => (
                 <section
-  key={group.key}
-  style={{
-    width: "1180px"
-  }}
->
+                  key={group.key}
+                  style={{
+                    width: "1180px"
+                  }}
+                >
                   <div
                     style={{
                       marginBottom: "18px",
@@ -635,14 +719,14 @@ export default function App() {
                     </p>
                   </div>
 
-                 <div
-  style={{
-    display: "grid",
-    gridTemplateColumns: "repeat(4, 1fr)",
-    gap: "20px",
-    alignItems: "start"
-  }}
->
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "repeat(4, 1fr)",
+                      gap: "20px",
+                      alignItems: "start"
+                    }}
+                  >
                     {group.products.map((product) => (
                       <div
                         key={product.id}
@@ -1053,22 +1137,30 @@ export default function App() {
                       </div>
 
                       <button
-                        onClick={() => setShowOrderForm(true)}
+                        onClick={() => {
+                          if (currentStatus.allowOrder) {
+                            setShowOrderForm(true);
+                          }
+                        }}
+                        disabled={!currentStatus.allowOrder}
                         style={{
                           width: "100%",
                           padding: "14px 16px",
                           fontSize: "17px",
                           borderRadius: "12px",
                           border: "none",
-                          background:
-                            "linear-gradient(180deg, #d7aa63 0%, #bf914f 100%)",
+                          background: !currentStatus.allowOrder
+                            ? "#6b7280"
+                            : "linear-gradient(180deg, #d7aa63 0%, #bf914f 100%)",
                           color: "#111827",
-                          cursor: "pointer",
+                          cursor: !currentStatus.allowOrder ? "not-allowed" : "pointer",
                           fontWeight: "800",
-                          boxShadow: "0 8px 18px rgba(191,145,79,0.22)"
+                          boxShadow: !currentStatus.allowOrder
+                            ? "none"
+                            : "0 8px 18px rgba(191,145,79,0.22)"
                         }}
                       >
-                        주문 접수
+                        {!currentStatus.allowOrder ? "현재 주문 불가" : "주문 접수"}
                       </button>
                     </div>
                   </>
@@ -1466,7 +1558,8 @@ export default function App() {
                   disabled={
                     isSubmitting ||
                     orderInfo.customerName.trim() === "" ||
-                    orderInfo.contact.trim() === ""
+                    orderInfo.contact.trim() === "" ||
+                    !currentStatus.allowOrder
                   }
                   style={{
                     flex: 1,
@@ -1476,14 +1569,16 @@ export default function App() {
                     backgroundColor:
                       isSubmitting ||
                       orderInfo.customerName.trim() === "" ||
-                      orderInfo.contact.trim() === ""
+                      orderInfo.contact.trim() === "" ||
+                      !currentStatus.allowOrder
                         ? "#6b7280"
                         : "#bf914f",
                     color: "#111827",
                     cursor:
                       isSubmitting ||
                       orderInfo.customerName.trim() === "" ||
-                      orderInfo.contact.trim() === ""
+                      orderInfo.contact.trim() === "" ||
+                      !currentStatus.allowOrder
                         ? "not-allowed"
                         : "pointer",
                     fontWeight: "800",
