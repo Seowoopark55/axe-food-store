@@ -14,7 +14,7 @@ import axePosterImage from "./axe_poster.png";
 
 export default function App() {
   const SCRIPT_URL =
-    "https://script.google.com/macros/s/AKfycbxDzrVMpbAw18cThxqWq5fzBahX8B-vtN-zQ5lxysEa_c6KZ2kqyFXnxhveLtLYVUzynw/exec";
+    "https://script.google.com/macros/s/AKfycbwKioKGaG1_tEhvUSIDgAKnk-qRyIiCYfO6aGWV8Dm765dyNkoQiiYblp1OTHioevk6Yg/exec";
 
   const CATEGORY_CONFIG = [
     {
