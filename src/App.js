@@ -573,7 +573,7 @@ export default function App() {
                 <div
                   style={{
                     textAlign: "center",
-                    paddingLeft: "330px",
+                    paddingLeft: "310px",
                     paddingRight: "0px"
                   }}
                 >
@@ -703,24 +703,20 @@ export default function App() {
                     {isLoadingStatus ? "잠시만 기다려 주세요." : storeMessage}
                   </p>
 
-{storeNotice && (
-  <div
-    style={{
-      margin: "6px 0 0 0",
-      color: "#d8b072",
-      fontSize: "12px",
-      lineHeight: 1.55,
-      fontWeight: "600"
-    }}
-  >
-    {storeNotice.split("\n").map((line, index) => (
-      <div key={index}>{line}</div>
-    ))}
-  </div>
-)}
+                  {storeNotice && (
+                    <div
+                      style={{
+                        margin: "6px 0 0 0",
+                        color: "#d8b072",
+                        fontSize: "12px",
+                        lineHeight: 1.55,
+                        fontWeight: "600"
+                      }}
                     >
-                      {storeNotice}
-                    </p>
+                      {storeNotice.split("\n").map((line, index) => (
+                        <div key={index}>{line}</div>
+                      ))}
+                    </div>
                   )}
                 </div>
               </div>
