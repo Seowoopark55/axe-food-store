@@ -358,6 +358,20 @@ export default function App() {
   const [storeNotice, setStoreNotice] = useState("");
   const [isLoadingStatus, setIsLoadingStatus] = useState(true);
 
+  const formatPhoneNumber = (value) => {
+    const numbers = String(value || "").replace(/[^0-9]/g, "").slice(0, 11);
+
+    if (numbers.length <= 3) {
+      return numbers;
+    }
+
+    if (numbers.length <= 7) {
+      return `(${numbers.slice(0, 3)}) ${numbers.slice(3)}`;
+    }
+
+    return `(${numbers.slice(0, 3)}) ${numbers.slice(3, 7)}-${numbers.slice(7, 11)}`;
+  };
+
   useEffect(() => {
     try {
       const savedCustomerName =
@@ -368,7 +382,7 @@ export default function App() {
         setOrderInfo((prev) => ({
           ...prev,
           customerName: savedCustomerName,
-          contact: savedContact
+          contact: formatPhoneNumber(savedContact)
         }));
       }
     } catch (error) {
@@ -509,7 +523,7 @@ export default function App() {
     if (isSubmitting || cart.length === 0 || !currentStatus.allowOrder) return;
 
     const trimmedCustomerName = orderInfo.customerName.trim();
-    const trimmedContact = orderInfo.contact.trim();
+    const trimmedContact = formatPhoneNumber(orderInfo.contact).trim();
 
     const orderData = {
       customerName: trimmedCustomerName,
@@ -810,18 +824,8 @@ export default function App() {
               }}
             >
               {groupedProducts.map((group) => (
-                <section
-                  key={group.key}
-                  style={{
-                    width: "1180px"
-                  }}
-                >
-                  <div
-                    style={{
-                      marginBottom: "18px",
-                      padding: "0 4px"
-                    }}
-                  >
+                <section key={group.key} style={{ width: "1180px" }}>
+                  <div style={{ marginBottom: "18px", padding: "0 4px" }}>
                     <div
                       style={{
                         display: "flex",
@@ -1003,7 +1007,9 @@ export default function App() {
                           </div>
 
                           <button
-                            onClick={() => changeSelectedQuantity(product.id, 1)}
+                            onClick={() =>
+                              changeSelectedQuantity(product.id, 1)
+                            }
                             style={{
                               width: "38px",
                               height: "38px",
@@ -1064,19 +1070,8 @@ export default function App() {
             </div>
           </div>
 
-          <aside
-            style={{
-              position: "sticky",
-              top: "20px"
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "20px"
-              }}
-            >
+          <aside style={{ position: "sticky", top: "20px" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
               <div
                 style={{
                   background:
@@ -1099,10 +1094,7 @@ export default function App() {
                   <img
                     src={axePosterImage}
                     alt="AXE 신규 인원 모집"
-                    style={{
-                      width: "100%",
-                      display: "block"
-                    }}
+                    style={{ width: "100%", display: "block" }}
                   />
                 </div>
               </div>
@@ -1129,12 +1121,7 @@ export default function App() {
                 </h2>
 
                 {cart.length === 0 && (
-                  <div
-                    style={{
-                      color: "#9ca3af",
-                      lineHeight: 1.7
-                    }}
-                  >
+                  <div style={{ color: "#9ca3af", lineHeight: 1.7 }}>
                     장바구니가 비어 있습니다.
                   </div>
                 )}
@@ -1200,8 +1187,7 @@ export default function App() {
                               marginBottom: "12px"
                             }}
                           >
-                            {item.quantity}세트 ·{" "}
-                            {formatPrice(item.price * item.quantity)}
+                            {item.quantity}세트 · {formatPrice(item.price * item.quantity)}
                           </div>
 
                           <div
@@ -1263,12 +1249,7 @@ export default function App() {
                     </div>
 
                     <div style={{ marginTop: "20px" }}>
-                      <div
-                        style={{
-                          marginBottom: "8px",
-                          color: "#d1d5db"
-                        }}
-                      >
+                      <div style={{ marginBottom: "8px", color: "#d1d5db" }}>
                         총 세트 수: {totalSets}세트
                       </div>
 
@@ -1306,9 +1287,7 @@ export default function App() {
                             : "0 8px 18px rgba(191,145,79,0.22)"
                         }}
                       >
-                        {!currentStatus.allowOrder
-                          ? "현재 주문 불가"
-                          : "주문 접수"}
+                        {!currentStatus.allowOrder ? "현재 주문 불가" : "주문 접수"}
                       </button>
                     </div>
                   </>
@@ -1345,12 +1324,7 @@ export default function App() {
                 boxShadow: "0 18px 40px rgba(0,0,0,0.4)"
               }}
             >
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "1fr 1fr"
-                }}
-              >
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}>
                 <div
                   style={{
                     backgroundColor: "#0b1220",
@@ -1421,13 +1395,7 @@ export default function App() {
                       marginBottom: "14px"
                     }}
                   >
-                    <div
-                      style={{
-                        fontSize: "13px",
-                        color: "#9ca3af",
-                        marginBottom: "10px"
-                      }}
-                    >
+                    <div style={{ fontSize: "13px", color: "#9ca3af", marginBottom: "10px" }}>
                       기본 정보
                     </div>
 
@@ -1456,13 +1424,7 @@ export default function App() {
                           marginBottom: "14px"
                         }}
                       >
-                        <div
-                          style={{
-                            fontSize: "13px",
-                            color: "#9ca3af",
-                            marginBottom: "10px"
-                          }}
-                        >
+                        <div style={{ fontSize: "13px", color: "#9ca3af", marginBottom: "10px" }}>
                           섭취 효과
                         </div>
 
@@ -1487,13 +1449,7 @@ export default function App() {
                           marginBottom: "14px"
                         }}
                       >
-                        <div
-                          style={{
-                            fontSize: "13px",
-                            color: "#9ca3af",
-                            marginBottom: "10px"
-                          }}
-                        >
+                        <div style={{ fontSize: "13px", color: "#9ca3af", marginBottom: "10px" }}>
                           버프 효과
                         </div>
 
@@ -1516,22 +1472,11 @@ export default function App() {
                       marginBottom: "20px"
                     }}
                   >
-                    <div
-                      style={{
-                        fontSize: "13px",
-                        color: "#9ca3af",
-                        marginBottom: "10px"
-                      }}
-                    >
+                    <div style={{ fontSize: "13px", color: "#9ca3af", marginBottom: "10px" }}>
                       설명
                     </div>
 
-                    <div
-                      style={{
-                        lineHeight: 1.8,
-                        color: "#d1d5db"
-                      }}
-                    >
+                    <div style={{ lineHeight: 1.8, color: "#d1d5db" }}>
                       {selectedProduct.description}
                     </div>
                   </div>
@@ -1653,11 +1598,13 @@ export default function App() {
                 </div>
                 <input
                   type="text"
+                  inputMode="numeric"
+                  placeholder="(310) 7621-3004"
                   value={orderInfo.contact}
                   onChange={(e) =>
                     setOrderInfo((prev) => ({
                       ...prev,
-                      contact: e.target.value
+                      contact: formatPhoneNumber(e.target.value)
                     }))
                   }
                   style={{
