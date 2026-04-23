@@ -515,12 +515,17 @@ export default function App() {
                   position: "relative",
                   zIndex: 1,
                   display: "grid",
-                  gridTemplateColumns: "1fr 340px",
-                  gap: "28px",
+                  gridTemplateColumns: "minmax(0, 1.35fr) 300px",
+                  gap: "24px",
                   alignItems: "center"
                 }}
               >
-                <div style={{ textAlign: "center" }}>
+                <div
+                  style={{
+                    textAlign: "center",
+                    paddingLeft: "32px"
+                  }}
+                >
                   <div
                     style={{
                       marginBottom: "18px",
@@ -537,7 +542,7 @@ export default function App() {
                     className="notranslate"
                     style={{
                       margin: 0,
-                      fontSize: "86px",
+                      fontSize: "76px",
                       lineHeight: 1,
                       letterSpacing: "-0.04em",
                       fontWeight: "800",
@@ -586,7 +591,7 @@ export default function App() {
                     style={{
                       margin: "20px 0 0 0",
                       color: "#d7b37a",
-                      fontSize: "22px",
+                      fontSize: "20px",
                       lineHeight: 1.6,
                       fontWeight: "500"
                     }}
@@ -598,7 +603,7 @@ export default function App() {
                 <div
                   style={{
                     borderRadius: "20px",
-                    padding: "20px 22px",
+                    padding: "18px 18px",
                     background: "rgba(15, 23, 42, 0.82)",
                     border: "1px solid rgba(191,145,79,0.18)",
                     boxShadow: "0 12px 24px rgba(0,0,0,0.18)",
@@ -616,7 +621,7 @@ export default function App() {
                       color: "#111827",
                       fontSize: "13px",
                       fontWeight: "800",
-                      marginBottom: "14px"
+                      marginBottom: "12px"
                     }}
                   >
                     {isLoadingStatus ? "상태 확인 중..." : currentStatus.badge}
@@ -625,7 +630,7 @@ export default function App() {
                   <h3
                     style={{
                       margin: "0 0 8px 0",
-                      fontSize: "24px",
+                      fontSize: "22px",
                       fontWeight: "800",
                       color: "#f8fafc",
                       letterSpacing: "-0.03em",
@@ -639,8 +644,8 @@ export default function App() {
                     style={{
                       margin: 0,
                       color: "#cbd5e1",
-                      fontSize: "15px",
-                      lineHeight: 1.75
+                      fontSize: "14px",
+                      lineHeight: 1.7
                     }}
                   >
                     {isLoadingStatus ? "잠시만 기다려 주세요." : storeMessage}
@@ -651,7 +656,7 @@ export default function App() {
                       style={{
                         margin: "10px 0 0 0",
                         color: "#d8b072",
-                        fontSize: "14px",
+                        fontSize: "13px",
                         lineHeight: 1.7,
                         fontWeight: "600"
                       }}
