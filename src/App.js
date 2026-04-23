@@ -515,7 +515,7 @@ export default function App() {
                   position: "relative",
                   zIndex: 1,
                   display: "grid",
-                  gridTemplateColumns: "minmax(0, 1.42fr) 290px",
+                  gridTemplateColumns: "minmax(0, 1.42fr) 270px",
                   gap: "22px",
                   alignItems: "center"
                 }}
