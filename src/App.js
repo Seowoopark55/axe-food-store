@@ -18,6 +18,11 @@ export default function App() {
   const SCRIPT_URL =
     "https://script.google.com/macros/s/AKfycbzjKurN4VoiCcf-VpTSsSrHs2SVXGy79ZSop38GU2w5ysEYTmx57meEbu5VoxeFr9nnfA/exec";
 
+  const STORAGE_KEYS = {
+    customerName: "axe_food_customer_name",
+    contact: "axe_food_contact"
+  };
+
   const CATEGORY_CONFIG = [
     {
       key: "restore",
@@ -335,6 +340,24 @@ export default function App() {
   const [storeNotice, setStoreNotice] = useState("");
   const [isLoadingStatus, setIsLoadingStatus] = useState(true);
 
+  useEffect(() => {
+    try {
+      const savedCustomerName =
+        localStorage.getItem(STORAGE_KEYS.customerName) || "";
+      const savedContact = localStorage.getItem(STORAGE_KEYS.contact) || "";
+
+      if (savedCustomerName || savedContact) {
+        setOrderInfo((prev) => ({
+          ...prev,
+          customerName: savedCustomerName,
+          contact: savedContact
+        }));
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
+
   const groupedProducts = useMemo(() => {
     return CATEGORY_CONFIG.map((category) => ({
       ...category,
@@ -343,24 +366,6 @@ export default function App() {
   }, []);
 
   const formatPrice = (value) => `${Number(value).toLocaleString()}원`;
-
-  const statusStyle = {
-    OPEN: {
-      badge: "현재 주문 가능",
-      badgeColor: "#22c55e",
-      allowOrder: true
-    },
-    RESERVE: {
-      badge: "예약 주문만 가능",
-      badgeColor: "#f59e0b",
-      allowOrder: true
-    },
-    CLOSED: {
-      badge: "주문 마감",
-      badgeColor: "#ef4444",
-      allowOrder: false
-    }
-  };
 
   const currentStatus = statusStyle[storeStatus] || statusStyle.OPEN;
 
@@ -396,6 +401,21 @@ export default function App() {
 
     fetchStoreStatus();
   }, []);
+
+  const clearSavedOrderInfo = () => {
+    try {
+      localStorage.removeItem(STORAGE_KEYS.customerName);
+      localStorage.removeItem(STORAGE_KEYS.contact);
+    } catch (error) {
+      console.error(error);
+    }
+
+    setOrderInfo((prev) => ({
+      ...prev,
+      customerName: "",
+      contact: ""
+    }));
+  };
 
   const changeSelectedQuantity = (id, amount) => {
     setSelectedQuantities((prev) => ({
@@ -452,9 +472,12 @@ export default function App() {
   const submitOrder = async () => {
     if (isSubmitting || cart.length === 0 || !currentStatus.allowOrder) return;
 
+    const trimmedCustomerName = orderInfo.customerName.trim();
+    const trimmedContact = orderInfo.contact.trim();
+
     const orderData = {
-      customerName: orderInfo.customerName.trim(),
-      contact: orderInfo.contact.trim(),
+      customerName: trimmedCustomerName,
+      contact: trimmedContact,
       memo: orderInfo.memo.trim(),
       items: cart.map((item) => ({
         name: item.name,
@@ -476,10 +499,17 @@ export default function App() {
         body: JSON.stringify(orderData)
       });
 
+      try {
+        localStorage.setItem(STORAGE_KEYS.customerName, trimmedCustomerName);
+        localStorage.setItem(STORAGE_KEYS.contact, trimmedContact);
+      } catch (error) {
+        console.error(error);
+      }
+
       setCart([]);
       setOrderInfo({
-        customerName: "",
-        contact: "",
+        customerName: trimmedCustomerName,
+        contact: trimmedContact,
         memo: ""
       });
       setShowOrderForm(false);
@@ -669,7 +699,9 @@ export default function App() {
                       gap: "8px",
                       padding: "6px 10px",
                       borderRadius: "999px",
-                      backgroundColor: isLoadingStatus ? "#6b7280" : currentStatus.badgeColor,
+                      backgroundColor: isLoadingStatus
+                        ? "#6b7280"
+                        : currentStatus.badgeColor,
                       color: "#111827",
                       fontSize: "12px",
                       fontWeight: "800",
@@ -689,7 +721,9 @@ export default function App() {
                       lineHeight: 1.3
                     }}
                   >
-                    {isLoadingStatus ? "운영상태를 확인하고 있습니다" : storeTitle}
+                    {isLoadingStatus
+                      ? "운영상태를 확인하고 있습니다"
+                      : storeTitle}
                   </h3>
 
                   <p
@@ -892,7 +926,9 @@ export default function App() {
                           }}
                         >
                           <button
-                            onClick={() => changeSelectedQuantity(product.id, -1)}
+                            onClick={() =>
+                              changeSelectedQuantity(product.id, -1)
+                            }
                             style={{
                               width: "38px",
                               height: "38px",
@@ -1121,7 +1157,8 @@ export default function App() {
                               marginBottom: "12px"
                             }}
                           >
-                            {item.quantity}세트 · {formatPrice(item.price * item.quantity)}
+                            {item.quantity}세트 ·{" "}
+                            {formatPrice(item.price * item.quantity)}
                           </div>
 
                           <div
@@ -1221,14 +1258,18 @@ export default function App() {
                             ? "#6b7280"
                             : "linear-gradient(180deg, #d7aa63 0%, #bf914f 100%)",
                           color: "#111827",
-                          cursor: !currentStatus.allowOrder ? "not-allowed" : "pointer",
+                          cursor: !currentStatus.allowOrder
+                            ? "not-allowed"
+                            : "pointer",
                           fontWeight: "800",
                           boxShadow: !currentStatus.allowOrder
                             ? "none"
                             : "0 8px 18px rgba(191,145,79,0.22)"
                         }}
                       >
-                        {!currentStatus.allowOrder ? "현재 주문 불가" : "주문 접수"}
+                        {!currentStatus.allowOrder
+                          ? "현재 주문 불가"
+                          : "주문 접수"}
                       </button>
                     </div>
                   </>
@@ -1567,7 +1608,7 @@ export default function App() {
                 />
               </div>
 
-              <div style={{ marginBottom: "16px" }}>
+              <div style={{ marginBottom: "10px" }}>
                 <div style={{ marginBottom: "8px", fontWeight: "700" }}>
                   인게임 연락처
                 </div>
@@ -1591,6 +1632,17 @@ export default function App() {
                     boxSizing: "border-box"
                   }}
                 />
+              </div>
+
+              <div
+                style={{
+                  marginBottom: "16px",
+                  color: "#9ca3af",
+                  fontSize: "13px",
+                  lineHeight: 1.6
+                }}
+              >
+                이전에 입력한 닉네임과 전화번호는 이 브라우저에 저장됩니다.
               </div>
 
               <div style={{ marginBottom: "24px" }}>
@@ -1620,7 +1672,7 @@ export default function App() {
                 />
               </div>
 
-              <div style={{ display: "flex", gap: "12px" }}>
+              <div style={{ display: "flex", gap: "12px", marginBottom: "12px" }}>
                 <button
                   onClick={submitOrder}
                   disabled={
@@ -1673,6 +1725,24 @@ export default function App() {
                   닫기
                 </button>
               </div>
+
+              <button
+                onClick={clearSavedOrderInfo}
+                type="button"
+                style={{
+                  width: "100%",
+                  padding: "11px 14px",
+                  borderRadius: "12px",
+                  border: "1px solid #4b5563",
+                  background: "#111827",
+                  color: "#fca5a5",
+                  cursor: "pointer",
+                  fontWeight: "700",
+                  fontSize: "14px"
+                }}
+              >
+                저장된 정보 삭제
+              </button>
             </div>
           </div>
         )}
