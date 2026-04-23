@@ -10,11 +10,13 @@ import caneleImage from "./Canele.png";
 import macaronImage from "./macaron.png";
 import milkTeaImage from "./milk_tea.png";
 import icedMacchiatoImage from "./iced_macchiato.png";
+import pinkFishStewImage from "./pink_fish_stew.png";
+import whiteFishStewImage from "./white_fish_stew.png";
 import axePosterImage from "./axe_poster.png";
 
 export default function App() {
   const SCRIPT_URL =
-    "https://script.google.com/macros/s/AKfycbwKioKGaG1_tEhvUSIDgAKnk-qRyIiCYfO6aGWV8Dm765dyNkoQiiYblp1OTHioevk6Yg/exec";
+    "https://script.google.com/macros/s/AKfycbzjKurN4VoiCcf-VpTSsSrHs2SVXGy79ZSop38GU2w5ysEYTmx57meEbu5VoxeFr9nnfA/exec";
 
   const CATEGORY_CONFIG = [
     {
@@ -109,7 +111,7 @@ export default function App() {
       tag: "배고픔+",
       tagColor: "#d8a95e",
       setCount: 12,
-      price: 900,
+      price: 1000,
       image: caneleImage,
       detailImage: caneleImage,
       consumeStats: [
@@ -153,7 +155,7 @@ export default function App() {
       tag: "채광버프+",
       tagColor: "#f59e0b",
       setCount: 10,
-      price: 800,
+      price: 900,
       image: brownieImage,
       detailImage: brownieImage,
       consumeStats: [
@@ -259,6 +261,54 @@ export default function App() {
         { label: "전력질주 소모 스태미나 감소", value: "4" }
       ],
       description: "시원하게 즐기는 아이스 마끼아또다."
+    },
+    {
+      id: 11,
+      category: "combat",
+      name: "분홍살 생선 조림",
+      tag: "체력증가+",
+      tagColor: "#fb7185",
+      setCount: 4,
+      price: 4800,
+      image: pinkFishStewImage,
+      detailImage: pinkFishStewImage,
+      consumeStats: [
+        { label: "배고픔", value: "+6750" },
+        { label: "목마름", value: "-100" },
+        { label: "집중력", value: "+400" },
+        { label: "경험치", value: "+64" },
+        { label: "섭취시간", value: "9초" }
+      ],
+      buffStats: [
+        { label: "지속시간", value: "4분 8초" },
+        { label: "최대 체력 증가", value: "24" },
+        { label: "체력 재생 증가", value: "2" }
+      ],
+      description: "간장 양념에 푹 졸여낸 촉촉한 분홍살 생선 조림이다."
+    },
+    {
+      id: 12,
+      category: "combat",
+      name: "흰살 생선 조림",
+      tag: "체력증가+",
+      tagColor: "#facc15",
+      setCount: 4,
+      price: 3200,
+      image: whiteFishStewImage,
+      detailImage: whiteFishStewImage,
+      consumeStats: [
+        { label: "배고픔", value: "+6750" },
+        { label: "목마름", value: "-100" },
+        { label: "집중력", value: "+400" },
+        { label: "경험치", value: "+64" },
+        { label: "섭취시간", value: "9초" }
+      ],
+      buffStats: [
+        { label: "지속시간", value: "3분 6초" },
+        { label: "최대 체력 증가", value: "20" },
+        { label: "체력 재생 증가", value: "2" }
+      ],
+      description: "간장 양념에 푹 졸여낸 촉촉한 흰살 생선 조림이다."
     }
   ];
 
@@ -515,7 +565,7 @@ export default function App() {
                   position: "relative",
                   zIndex: 1,
                   display: "grid",
-                  gridTemplateColumns: "minmax(0, 1.42fr) 270px",
+                  gridTemplateColumns: "minmax(0, 1.42fr) 290px",
                   gap: "22px",
                   alignItems: "center"
                 }}
@@ -523,7 +573,7 @@ export default function App() {
                 <div
                   style={{
                     textAlign: "center",
-                    paddingLeft: "300px",
+                    paddingLeft: "330px",
                     paddingRight: "0px"
                   }}
                 >
@@ -663,7 +713,7 @@ export default function App() {
                         fontWeight: "600"
                       }}
                     >
-                      {storeNotice}
+                      안내: {storeNotice}
                     </p>
                   )}
                 </div>
