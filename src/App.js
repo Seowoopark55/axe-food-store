@@ -515,17 +515,17 @@ export default function App() {
                   position: "relative",
                   zIndex: 1,
                   display: "grid",
-                  gridTemplateColumns: "minmax(0, 1.42fr) 290px",
+                  gridTemplateColumns: "minmax(0, 1.38fr) 300px",
                   gap: "22px",
                   alignItems: "center"
                 }}
               >
                 <div
                   style={{
-                    textAlign: "center",
-                    paddingLeft: "0px",
-                    paddingRight: "28px"
-                  }}
+  textAlign: "center",
+  paddingLeft: "36px",
+  paddingRight: "0px"
+}}
                 >
                   <div
                     style={{
