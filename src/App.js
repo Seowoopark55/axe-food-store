@@ -1599,7 +1599,7 @@ export default function App() {
                 <input
                   type="text"
                   inputMode="numeric"
-                  placeholder="(310) 7621-3004"
+                  placeholder="예: 31076213004"
                   value={orderInfo.contact}
                   onChange={(e) =>
                     setOrderInfo((prev) => ({
@@ -1628,6 +1628,7 @@ export default function App() {
                   lineHeight: 1.6
                 }}
               >
+                숫자만 입력하시면 (310) 7621-3004 형식으로 자동 정리됩니다.<br />
                 이전에 입력한 닉네임과 전화번호는 이 브라우저에 저장됩니다.
               </div>
 
