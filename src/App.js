@@ -726,16 +726,23 @@ export default function App() {
                       : storeTitle}
                   </h3>
 
-                  <p
-                    style={{
-                      margin: 0,
-                      color: "#cbd5e1",
-                      fontSize: "13px",
-                      lineHeight: 1.55
-                    }}
-                  >
-                    {isLoadingStatus ? "잠시만 기다려 주세요." : storeMessage}
-                  </p>
+                 <div
+  style={{
+    margin: 0,
+    color: "#cbd5e1",
+    fontSize: "13px",
+    lineHeight: 1.55
+  }}
+>
+  {(isLoadingStatus
+    ? "잠시만 기다려 주세요."
+    : storeMessage
+  )
+    .split("\n")
+    .map((line, index) => (
+      <div key={index}>{line}</div>
+    ))}
+</div>
 
                   {storeNotice && (
                     <div
