@@ -16,7 +16,7 @@ import axePosterImage from "./axe_poster.png";
 
 export default function App() {
   const SCRIPT_URL =
-    "https://script.google.com/macros/s/AKfycbwrr7bFFj1znOSw05hYbFAkhQH1TzVMrxwQKI-_l-77kAi3QABGwCm0E1vc31WRxYGuOg/exec";
+    "https://script.google.com/macros/s/AKfycbxoqnIsI96ig0W7IPoDU9qdy0UgG3YULu0YlYANk5Wfz7WHgXSPBAX6zPXPJ-4QB4wzjA/exec";
 
   const STORAGE_KEYS = {
     customerName: "axe_food_customer_name",
@@ -317,6 +317,24 @@ export default function App() {
     }
   ];
 
+  const statusStyle = {
+    OPEN: {
+      badge: "OPEN",
+      badgeColor: "#22c55e",
+      allowOrder: true
+    },
+    RESERVE: {
+      badge: "RESERVE",
+      badgeColor: "#f59e0b",
+      allowOrder: true
+    },
+    CLOSED: {
+      badge: "CLOSED",
+      badgeColor: "#ef4444",
+      allowOrder: false
+    }
+  };
+
   const [cart, setCart] = useState([]);
   const [selectedQuantities, setSelectedQuantities] = useState(
     PRODUCTS.reduce((acc, product) => {
@@ -468,6 +486,24 @@ export default function App() {
   const totalSets = useMemo(() => {
     return cart.reduce((sum, item) => sum + item.quantity, 0);
   }, [cart]);
+
+  const handleOpenOrderForm = () => {
+    if (!currentStatus.allowOrder) {
+      return;
+    }
+
+    if (storeStatus === "RESERVE") {
+      const confirmed = window.confirm(
+        "현재 예약 운영 중입니다.\n\n즉시 전달이 아닌 다음 전달 시간에 맞춰 제작됩니다.\n주문 후 바로 수령이 어려울 수 있습니다.\n\n계속 주문하시겠습니까?"
+      );
+
+      if (!confirmed) {
+        return;
+      }
+    }
+
+    setShowOrderForm(true);
+  };
 
   const submitOrder = async () => {
     if (isSubmitting || cart.length === 0 || !currentStatus.allowOrder) return;
@@ -726,23 +762,23 @@ export default function App() {
                       : storeTitle}
                   </h3>
 
-                 <div
-  style={{
-    margin: 0,
-    color: "#cbd5e1",
-    fontSize: "13px",
-    lineHeight: 1.55
-  }}
->
-  {(isLoadingStatus
-    ? "잠시만 기다려 주세요."
-    : storeMessage
-  )
-    .split("\n")
-    .map((line, index) => (
-      <div key={index}>{line}</div>
-    ))}
-</div>
+                  <div
+                    style={{
+                      margin: 0,
+                      color: "#cbd5e1",
+                      fontSize: "13px",
+                      lineHeight: 1.55
+                    }}
+                  >
+                    {(isLoadingStatus
+                      ? "잠시만 기다려 주세요."
+                      : storeMessage
+                    )
+                      .split("\n")
+                      .map((line, index) => (
+                        <div key={index}>{line}</div>
+                      ))}
+                  </div>
 
                   {storeNotice && (
                     <div
@@ -1249,11 +1285,7 @@ export default function App() {
                       </div>
 
                       <button
-                        onClick={() => {
-                          if (currentStatus.allowOrder) {
-                            setShowOrderForm(true);
-                          }
-                        }}
+                        onClick={handleOpenOrderForm}
                         disabled={!currentStatus.allowOrder}
                         style={{
                           width: "100%",
