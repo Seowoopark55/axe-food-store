@@ -361,19 +361,25 @@ export default function App() {
 
   const stockStyle = {
     ON: {
-      label: "판매중",
+      label: "판매 가능",
       color: "#22c55e",
-      allowCart: true
+      textColor: "#052e16",
+      allowCart: true,
+      buttonText: "담기"
     },
     RESERVE: {
       label: "예약 가능",
-      color: "#f59e0b",
-      allowCart: true
+      color: "#f97316",
+      textColor: "#ffffff",
+      allowCart: true,
+      buttonText: "예약 담기"
     },
     SOLDOUT: {
       label: "품절",
       color: "#ef4444",
-      allowCart: false
+      textColor: "#ffffff",
+      allowCart: false,
+      buttonText: "품절"
     }
   };
 
@@ -893,6 +899,9 @@ export default function App() {
                     {group.products.map((product) => {
                       const productStockInfo = getStockInfo(product.name);
                       const productStockStyle = getStockStyle(product.name);
+                      const hasStockMessage =
+                        productStockInfo.message &&
+                        productStockInfo.message.trim() !== "";
 
                       return (
                         <div
@@ -937,25 +946,24 @@ export default function App() {
                               {product.tag}
                             </div>
 
-                            {productStockInfo.status !== "ON" && (
-                              <div
-                                style={{
-                                  position: "absolute",
-                                  top: "10px",
-                                  right: "10px",
-                                  zIndex: 2,
-                                  padding: "7px 11px",
-                                  borderRadius: "999px",
-                                  backgroundColor: productStockStyle.color,
-                                  color: "#111827",
-                                  fontSize: "12px",
-                                  fontWeight: "800",
-                                  boxShadow: "0 8px 18px rgba(0,0,0,0.22)"
-                                }}
-                              >
-                                {productStockStyle.label}
-                              </div>
-                            )}
+                            <div
+                              style={{
+                                position: "absolute",
+                                top: "10px",
+                                right: "10px",
+                                zIndex: 2,
+                                padding: "7px 11px",
+                                borderRadius: "999px",
+                                backgroundColor: productStockStyle.color,
+                                color: productStockStyle.textColor,
+                                fontSize: "12px",
+                                fontWeight: "900",
+                                letterSpacing: "-0.01em",
+                                boxShadow: "0 8px 18px rgba(0,0,0,0.32)"
+                              }}
+                            >
+                              {productStockStyle.label}
+                            </div>
 
                             <img
                               src={product.image}
@@ -1004,24 +1012,29 @@ export default function App() {
                             {formatPrice(product.price)}
                           </p>
 
-                          {productStockInfo.status !== "ON" &&
-                            productStockInfo.message && (
-                              <div
-                                style={{
-                                  margin: "0 0 14px 0",
-                                  padding: "10px 12px",
-                                  borderRadius: "10px",
-                                  backgroundColor: "rgba(15,23,42,0.9)",
-                                  border: "1px solid rgba(191,145,79,0.16)",
-                                  color: "#d8b072",
-                                  fontSize: "13px",
-                                  lineHeight: 1.5,
-                                  fontWeight: "600"
-                                }}
-                              >
-                                {productStockInfo.message}
-                              </div>
-                            )}
+                          <div
+                            style={{
+                              margin: "0 0 14px 0",
+                              padding: "10px 12px",
+                              minHeight: "42px",
+                              borderRadius: "10px",
+                              backgroundColor: hasStockMessage
+                                ? "rgba(15,23,42,0.9)"
+                                : "transparent",
+                              border: hasStockMessage
+                                ? "1px solid rgba(191,145,79,0.16)"
+                                : "1px solid transparent",
+                              color: "#d8b072",
+                              fontSize: "13px",
+                              lineHeight: 1.5,
+                              fontWeight: "600",
+                              visibility: hasStockMessage ? "visible" : "hidden",
+                              boxSizing: "border-box",
+                              whiteSpace: "pre-line"
+                            }}
+                          >
+                            {productStockInfo.message || " "}
+                          </div>
 
                           <div
                             style={{
@@ -1115,11 +1128,7 @@ export default function App() {
                                   : "0 8px 18px rgba(191,145,79,0.22)"
                               }}
                             >
-                              {!productStockStyle.allowCart
-                                ? "품절"
-                                : productStockInfo.status === "RESERVE"
-                                ? "예약 담기"
-                                : "담기"}
+                              {productStockStyle.buttonText}
                             </button>
 
                             <button
@@ -1618,11 +1627,7 @@ export default function App() {
                         fontSize: "16px"
                       }}
                     >
-                      {!getStockStyle(selectedProduct.name).allowCart
-                        ? "품절"
-                        : getStockInfo(selectedProduct.name).status === "RESERVE"
-                        ? "예약 담기"
-                        : "담기"}
+                      {getStockStyle(selectedProduct.name).buttonText}
                     </button>
 
                     <button
