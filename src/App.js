@@ -16,7 +16,7 @@ import axePosterImage from "./axe_poster.png";
 
 export default function App() {
   const SCRIPT_URL =
-    "https://script.google.com/macros/s/AKfycbwLDCvn0s48_u_EU-ZM3sdMORtGjHFR1SHo2WOkJtxvhtneGMEiY8deP4Pzeqbhma3C/exec";
+    "https://script.google.com/macros/s/AKfycby0fJ_H_lxytebkVIlVDjlETnoYp1ttGoPrsuXlKeBgGRYObseudNAOeHYJl6D9PXMBaQ/exec";
 
   const STORAGE_KEYS = {
     customerName: "axe_food_customer_name",
@@ -317,24 +317,6 @@ export default function App() {
     }
   ];
 
-  const statusStyle = {
-    OPEN: {
-      badge: "OPEN",
-      badgeColor: "#22c55e",
-      allowOrder: true
-    },
-    RESERVE: {
-      badge: "RESERVE",
-      badgeColor: "#f59e0b",
-      allowOrder: true
-    },
-    CLOSED: {
-      badge: "CLOSED",
-      badgeColor: "#ef4444",
-      allowOrder: false
-    }
-  };
-
   const [cart, setCart] = useState([]);
   const [selectedQuantities, setSelectedQuantities] = useState(
     PRODUCTS.reduce((acc, product) => {
@@ -357,19 +339,65 @@ export default function App() {
   const [storeMessage, setStoreMessage] = useState("즉시 제작 및 전달이 가능합니다.");
   const [storeNotice, setStoreNotice] = useState("");
   const [isLoadingStatus, setIsLoadingStatus] = useState(true);
+  const [stockMap, setStockMap] = useState({});
 
-  const formatPhoneNumber = (value) => {
-    const numbers = String(value || "").replace(/[^0-9]/g, "").slice(0, 11);
-
-    if (numbers.length <= 3) {
-      return numbers;
+  const statusStyle = {
+    OPEN: {
+      badge: "현재 주문 가능",
+      badgeColor: "#22c55e",
+      allowOrder: true
+    },
+    RESERVE: {
+      badge: "예약 주문만 가능",
+      badgeColor: "#f59e0b",
+      allowOrder: true
+    },
+    CLOSED: {
+      badge: "주문 마감",
+      badgeColor: "#ef4444",
+      allowOrder: false
     }
+  };
 
-    if (numbers.length <= 7) {
-      return `(${numbers.slice(0, 3)}) ${numbers.slice(3)}`;
+  const stockStyle = {
+    ON: {
+      label: "판매중",
+      color: "#22c55e",
+      allowCart: true
+    },
+    RESERVE: {
+      label: "예약 가능",
+      color: "#f59e0b",
+      allowCart: true
+    },
+    SOLDOUT: {
+      label: "품절",
+      color: "#ef4444",
+      allowCart: false
     }
+  };
 
-    return `(${numbers.slice(0, 3)}) ${numbers.slice(3, 7)}-${numbers.slice(7, 11)}`;
+  const groupedProducts = useMemo(() => {
+    return CATEGORY_CONFIG.map((category) => ({
+      ...category,
+      products: PRODUCTS.filter((product) => product.category === category.key)
+    })).filter((category) => category.products.length > 0);
+  }, []);
+
+  const formatPrice = (value) => `${Number(value).toLocaleString()}원`;
+
+  const currentStatus = statusStyle[storeStatus] || statusStyle.OPEN;
+
+  const getStockInfo = (productName) => {
+    return stockMap[productName] || {
+      status: "ON",
+      message: ""
+    };
+  };
+
+  const getStockStyle = (productName) => {
+    const stockInfo = getStockInfo(productName);
+    return stockStyle[stockInfo.status] || stockStyle.ON;
   };
 
   useEffect(() => {
@@ -382,24 +410,13 @@ export default function App() {
         setOrderInfo((prev) => ({
           ...prev,
           customerName: savedCustomerName,
-          contact: formatPhoneNumber(savedContact)
+          contact: savedContact
         }));
       }
     } catch (error) {
       console.error(error);
     }
   }, []);
-
-  const groupedProducts = useMemo(() => {
-    return CATEGORY_CONFIG.map((category) => ({
-      ...category,
-      products: PRODUCTS.filter((product) => product.category === category.key)
-    })).filter((category) => category.products.length > 0);
-  }, []);
-
-  const formatPrice = (value) => `${Number(value).toLocaleString()}원`;
-
-  const currentStatus = statusStyle[storeStatus] || statusStyle.OPEN;
 
   useEffect(() => {
     const fetchStoreStatus = async () => {
@@ -414,11 +431,25 @@ export default function App() {
           setStoreTitle(data.title || "현재 주문 가능합니다");
           setStoreMessage(data.message || "즉시 제작 및 전달이 가능합니다.");
           setStoreNotice(data.notice || "");
+
+          if (Array.isArray(data.stockItems)) {
+            const nextStockMap = {};
+            data.stockItems.forEach((item) => {
+              if (item && item.name) {
+                nextStockMap[item.name] = {
+                  status: (item.status || "ON").toUpperCase(),
+                  message: item.message || ""
+                };
+              }
+            });
+            setStockMap(nextStockMap);
+          }
         } else {
           setStoreStatus("OPEN");
           setStoreTitle("현재 주문 가능합니다");
           setStoreMessage("즉시 제작 및 전달이 가능합니다.");
           setStoreNotice("");
+          setStockMap({});
         }
       } catch (error) {
         console.error(error);
@@ -426,6 +457,7 @@ export default function App() {
         setStoreTitle("현재 주문 가능합니다");
         setStoreMessage("즉시 제작 및 전달이 가능합니다.");
         setStoreNotice("");
+        setStockMap({});
       } finally {
         setIsLoadingStatus(false);
       }
@@ -457,6 +489,9 @@ export default function App() {
   };
 
   const addToCart = (product) => {
+    const productStockStyle = getStockStyle(product.name);
+    if (!productStockStyle.allowCart) return;
+
     const quantityToAdd = selectedQuantities[product.id] || 1;
 
     setCart((prev) => {
@@ -501,29 +536,11 @@ export default function App() {
     return cart.reduce((sum, item) => sum + item.quantity, 0);
   }, [cart]);
 
-  const handleOpenOrderForm = () => {
-    if (!currentStatus.allowOrder) {
-      return;
-    }
-
-    if (storeStatus === "RESERVE") {
-      const confirmed = window.confirm(
-        "현재 예약 운영 중입니다.\n\n즉시 전달이 아닌 다음 전달 시간에 맞춰 제작됩니다.\n주문 후 바로 수령이 어려울 수 있습니다.\n\n계속 주문하시겠습니까?"
-      );
-
-      if (!confirmed) {
-        return;
-      }
-    }
-
-    setShowOrderForm(true);
-  };
-
   const submitOrder = async () => {
     if (isSubmitting || cart.length === 0 || !currentStatus.allowOrder) return;
 
     const trimmedCustomerName = orderInfo.customerName.trim();
-    const trimmedContact = formatPhoneNumber(orderInfo.contact).trim();
+    const trimmedContact = orderInfo.contact.trim();
 
     const orderData = {
       customerName: trimmedCustomerName,
@@ -784,10 +801,7 @@ export default function App() {
                       lineHeight: 1.55
                     }}
                   >
-                    {(isLoadingStatus
-                      ? "잠시만 기다려 주세요."
-                      : storeMessage
-                    )
+                    {(isLoadingStatus ? "잠시만 기다려 주세요." : storeMessage)
                       .split("\n")
                       .map((line, index) => (
                         <div key={index}>{line}</div>
@@ -876,194 +890,258 @@ export default function App() {
                       alignItems: "start"
                     }}
                   >
-                    {group.products.map((product) => (
-                      <div
-                        key={product.id}
-                        style={{
-                          border: "1px solid rgba(191,145,79,0.22)",
-                          borderRadius: "18px",
-                          padding: "18px",
-                          background:
-                            "linear-gradient(180deg, rgba(16,24,39,0.92) 0%, rgba(17,24,39,0.98) 100%)",
-                          boxShadow: "0 12px 24px rgba(0,0,0,0.18)"
-                        }}
-                      >
+                    {group.products.map((product) => {
+                      const productStockInfo = getStockInfo(product.name);
+                      const productStockStyle = getStockStyle(product.name);
+
+                      return (
                         <div
+                          key={product.id}
                           style={{
-                            position: "relative",
-                            width: "100%",
-                            height: "180px",
-                            borderRadius: "14px",
-                            overflow: "hidden",
-                            marginBottom: "14px",
-                            backgroundColor: "#0f172a",
-                            border: "1px solid rgba(191,145,79,0.16)"
+                            border: "1px solid rgba(191,145,79,0.22)",
+                            borderRadius: "18px",
+                            padding: "18px",
+                            background:
+                              "linear-gradient(180deg, rgba(16,24,39,0.92) 0%, rgba(17,24,39,0.98) 100%)",
+                            boxShadow: "0 12px 24px rgba(0,0,0,0.18)"
                           }}
                         >
                           <div
                             style={{
-                              position: "absolute",
-                              top: "10px",
-                              left: "10px",
-                              zIndex: 2,
-                              padding: "7px 11px",
-                              borderRadius: "999px",
-                              backgroundColor: product.tagColor,
-                              color: "#111827",
-                              fontSize: "12px",
-                              fontWeight: "800",
-                              letterSpacing: "-0.01em",
-                              boxShadow: "0 8px 18px rgba(0,0,0,0.22)"
-                            }}
-                          >
-                            {product.tag}
-                          </div>
-
-                          <img
-                            src={product.image}
-                            alt={product.name}
-                            style={{
+                              position: "relative",
                               width: "100%",
-                              height: "100%",
-                              objectFit: "cover"
-                            }}
-                          />
-                        </div>
-
-                        <h3
-                          className="notranslate"
-                          style={{
-                            margin: "0 0 10px 0",
-                            fontSize: "24px",
-                            fontWeight: "800",
-                            letterSpacing: "-0.02em"
-                          }}
-                        >
-                          {product.name}
-                        </h3>
-
-                        <p
-                          style={{
-                            margin: "6px 0",
-                            color: "#cbd5e1",
-                            fontSize: "15px"
-                          }}
-                        >
-                          1세트 {product.setCount}ea
-                        </p>
-
-                        <p
-                          style={{
-                            margin: "6px 0 18px 0",
-                            fontWeight: "800",
-                            fontSize: "30px",
-                            color: "#d8a95e",
-                            letterSpacing: "-0.02em"
-                          }}
-                        >
-                          {formatPrice(product.price)}
-                        </p>
-
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "10px",
-                            marginBottom: "15px"
-                          }}
-                        >
-                          <button
-                            onClick={() =>
-                              changeSelectedQuantity(product.id, -1)
-                            }
-                            style={{
-                              width: "38px",
-                              height: "38px",
-                              borderRadius: "10px",
-                              border: "1px solid rgba(191,145,79,0.22)",
-                              background: "#111827",
-                              color: "#fff",
-                              cursor: "pointer",
-                              fontSize: "18px"
+                              height: "180px",
+                              borderRadius: "14px",
+                              overflow: "hidden",
+                              marginBottom: "14px",
+                              backgroundColor: "#0f172a",
+                              border: "1px solid rgba(191,145,79,0.16)"
                             }}
                           >
-                            -
-                          </button>
+                            <div
+                              style={{
+                                position: "absolute",
+                                top: "10px",
+                                left: "10px",
+                                zIndex: 2,
+                                padding: "7px 11px",
+                                borderRadius: "999px",
+                                backgroundColor: product.tagColor,
+                                color: "#111827",
+                                fontSize: "12px",
+                                fontWeight: "800",
+                                letterSpacing: "-0.01em",
+                                boxShadow: "0 8px 18px rgba(0,0,0,0.22)"
+                              }}
+                            >
+                              {product.tag}
+                            </div>
 
-                          <div
-                            style={{
-                              flex: 1,
-                              minWidth: "70px",
-                              textAlign: "center",
-                              fontWeight: "700",
-                              fontSize: "15px",
-                              padding: "10px 12px",
-                              borderRadius: "10px",
-                              backgroundColor: "#111827",
-                              border: "1px solid rgba(191,145,79,0.12)"
-                            }}
-                          >
-                            {selectedQuantities[product.id]}세트
+                            {productStockInfo.status !== "ON" && (
+                              <div
+                                style={{
+                                  position: "absolute",
+                                  top: "10px",
+                                  right: "10px",
+                                  zIndex: 2,
+                                  padding: "7px 11px",
+                                  borderRadius: "999px",
+                                  backgroundColor: productStockStyle.color,
+                                  color: "#111827",
+                                  fontSize: "12px",
+                                  fontWeight: "800",
+                                  boxShadow: "0 8px 18px rgba(0,0,0,0.22)"
+                                }}
+                              >
+                                {productStockStyle.label}
+                              </div>
+                            )}
+
+                            <img
+                              src={product.image}
+                              alt={product.name}
+                              style={{
+                                width: "100%",
+                                height: "100%",
+                                objectFit: "cover",
+                                opacity:
+                                  productStockInfo.status === "SOLDOUT" ? 0.48 : 1
+                              }}
+                            />
                           </div>
 
-                          <button
-                            onClick={() =>
-                              changeSelectedQuantity(product.id, 1)
-                            }
+                          <h3
+                            className="notranslate"
                             style={{
-                              width: "38px",
-                              height: "38px",
-                              borderRadius: "10px",
-                              border: "1px solid rgba(191,145,79,0.22)",
-                              background: "#111827",
-                              color: "#fff",
-                              cursor: "pointer",
-                              fontSize: "18px"
-                            }}
-                          >
-                            +
-                          </button>
-                        </div>
-
-                        <div style={{ display: "flex", gap: "10px" }}>
-                          <button
-                            onClick={() => addToCart(product)}
-                            style={{
-                              flex: 1,
-                              padding: "12px 14px",
-                              borderRadius: "12px",
-                              border: "none",
-                              background:
-                                "linear-gradient(180deg, #d7aa63 0%, #bf914f 100%)",
-                              color: "#111827",
-                              cursor: "pointer",
+                              margin: "0 0 10px 0",
+                              fontSize: "24px",
                               fontWeight: "800",
-                              fontSize: "15px",
-                              boxShadow: "0 8px 18px rgba(191,145,79,0.22)"
+                              letterSpacing: "-0.02em"
                             }}
                           >
-                            담기
-                          </button>
+                            {product.name}
+                          </h3>
 
-                          <button
-                            onClick={() => setSelectedProduct(product)}
+                          <p
                             style={{
-                              flex: 1,
-                              padding: "12px 14px",
-                              borderRadius: "12px",
-                              border: "1px solid rgba(191,145,79,0.24)",
-                              backgroundColor: "#111827",
-                              color: "#f8fafc",
-                              cursor: "pointer",
-                              fontWeight: "700",
+                              margin: "6px 0",
+                              color: "#cbd5e1",
                               fontSize: "15px"
                             }}
                           >
-                            상세보기
-                          </button>
+                            1세트 {product.setCount}ea
+                          </p>
+
+                          <p
+                            style={{
+                              margin: "6px 0 18px 0",
+                              fontWeight: "800",
+                              fontSize: "30px",
+                              color: "#d8a95e",
+                              letterSpacing: "-0.02em"
+                            }}
+                          >
+                            {formatPrice(product.price)}
+                          </p>
+
+                          {productStockInfo.status !== "ON" &&
+                            productStockInfo.message && (
+                              <div
+                                style={{
+                                  margin: "0 0 14px 0",
+                                  padding: "10px 12px",
+                                  borderRadius: "10px",
+                                  backgroundColor: "rgba(15,23,42,0.9)",
+                                  border: "1px solid rgba(191,145,79,0.16)",
+                                  color: "#d8b072",
+                                  fontSize: "13px",
+                                  lineHeight: 1.5,
+                                  fontWeight: "600"
+                                }}
+                              >
+                                {productStockInfo.message}
+                              </div>
+                            )}
+
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "10px",
+                              marginBottom: "15px"
+                            }}
+                          >
+                            <button
+                              onClick={() =>
+                                changeSelectedQuantity(product.id, -1)
+                              }
+                              disabled={!productStockStyle.allowCart}
+                              style={{
+                                width: "38px",
+                                height: "38px",
+                                borderRadius: "10px",
+                                border: "1px solid rgba(191,145,79,0.22)",
+                                background: "#111827",
+                                color: "#fff",
+                                cursor: productStockStyle.allowCart
+                                  ? "pointer"
+                                  : "not-allowed",
+                                fontSize: "18px",
+                                opacity: productStockStyle.allowCart ? 1 : 0.5
+                              }}
+                            >
+                              -
+                            </button>
+
+                            <div
+                              style={{
+                                flex: 1,
+                                minWidth: "70px",
+                                textAlign: "center",
+                                fontWeight: "700",
+                                fontSize: "15px",
+                                padding: "10px 12px",
+                                borderRadius: "10px",
+                                backgroundColor: "#111827",
+                                border: "1px solid rgba(191,145,79,0.12)"
+                              }}
+                            >
+                              {selectedQuantities[product.id]}세트
+                            </div>
+
+                            <button
+                              onClick={() =>
+                                changeSelectedQuantity(product.id, 1)
+                              }
+                              disabled={!productStockStyle.allowCart}
+                              style={{
+                                width: "38px",
+                                height: "38px",
+                                borderRadius: "10px",
+                                border: "1px solid rgba(191,145,79,0.22)",
+                                background: "#111827",
+                                color: "#fff",
+                                cursor: productStockStyle.allowCart
+                                  ? "pointer"
+                                  : "not-allowed",
+                                fontSize: "18px",
+                                opacity: productStockStyle.allowCart ? 1 : 0.5
+                              }}
+                            >
+                              +
+                            </button>
+                          </div>
+
+                          <div style={{ display: "flex", gap: "10px" }}>
+                            <button
+                              onClick={() => addToCart(product)}
+                              disabled={!productStockStyle.allowCart}
+                              style={{
+                                flex: 1,
+                                padding: "12px 14px",
+                                borderRadius: "12px",
+                                border: "none",
+                                background: !productStockStyle.allowCart
+                                  ? "#6b7280"
+                                  : "linear-gradient(180deg, #d7aa63 0%, #bf914f 100%)",
+                                color: "#111827",
+                                cursor: !productStockStyle.allowCart
+                                  ? "not-allowed"
+                                  : "pointer",
+                                fontWeight: "800",
+                                fontSize: "15px",
+                                boxShadow: !productStockStyle.allowCart
+                                  ? "none"
+                                  : "0 8px 18px rgba(191,145,79,0.22)"
+                              }}
+                            >
+                              {!productStockStyle.allowCart
+                                ? "품절"
+                                : productStockInfo.status === "RESERVE"
+                                ? "예약 담기"
+                                : "담기"}
+                            </button>
+
+                            <button
+                              onClick={() => setSelectedProduct(product)}
+                              style={{
+                                flex: 1,
+                                padding: "12px 14px",
+                                borderRadius: "12px",
+                                border: "1px solid rgba(191,145,79,0.24)",
+                                backgroundColor: "#111827",
+                                color: "#f8fafc",
+                                cursor: "pointer",
+                                fontWeight: "700",
+                                fontSize: "15px"
+                              }}
+                            >
+                              상세보기
+                            </button>
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </section>
               ))}
@@ -1187,7 +1265,8 @@ export default function App() {
                               marginBottom: "12px"
                             }}
                           >
-                            {item.quantity}세트 · {formatPrice(item.price * item.quantity)}
+                            {item.quantity}세트 ·{" "}
+                            {formatPrice(item.price * item.quantity)}
                           </div>
 
                           <div
@@ -1266,7 +1345,11 @@ export default function App() {
                       </div>
 
                       <button
-                        onClick={handleOpenOrderForm}
+                        onClick={() => {
+                          if (currentStatus.allowOrder) {
+                            setShowOrderForm(true);
+                          }
+                        }}
                         disabled={!currentStatus.allowOrder}
                         style={{
                           width: "100%",
@@ -1287,7 +1370,9 @@ export default function App() {
                             : "0 8px 18px rgba(191,145,79,0.22)"
                         }}
                       >
-                        {!currentStatus.allowOrder ? "현재 주문 불가" : "주문 접수"}
+                        {!currentStatus.allowOrder
+                          ? "현재 주문 불가"
+                          : "주문 접수"}
                       </button>
                     </div>
                   </>
@@ -1395,7 +1480,13 @@ export default function App() {
                       marginBottom: "14px"
                     }}
                   >
-                    <div style={{ fontSize: "13px", color: "#9ca3af", marginBottom: "10px" }}>
+                    <div
+                      style={{
+                        fontSize: "13px",
+                        color: "#9ca3af",
+                        marginBottom: "10px"
+                      }}
+                    >
                       기본 정보
                     </div>
 
@@ -1424,7 +1515,13 @@ export default function App() {
                           marginBottom: "14px"
                         }}
                       >
-                        <div style={{ fontSize: "13px", color: "#9ca3af", marginBottom: "10px" }}>
+                        <div
+                          style={{
+                            fontSize: "13px",
+                            color: "#9ca3af",
+                            marginBottom: "10px"
+                          }}
+                        >
                           섭취 효과
                         </div>
 
@@ -1449,7 +1546,13 @@ export default function App() {
                           marginBottom: "14px"
                         }}
                       >
-                        <div style={{ fontSize: "13px", color: "#9ca3af", marginBottom: "10px" }}>
+                        <div
+                          style={{
+                            fontSize: "13px",
+                            color: "#9ca3af",
+                            marginBottom: "10px"
+                          }}
+                        >
                           버프 효과
                         </div>
 
@@ -1472,11 +1575,22 @@ export default function App() {
                       marginBottom: "20px"
                     }}
                   >
-                    <div style={{ fontSize: "13px", color: "#9ca3af", marginBottom: "10px" }}>
+                    <div
+                      style={{
+                        fontSize: "13px",
+                        color: "#9ca3af",
+                        marginBottom: "10px"
+                      }}
+                    >
                       설명
                     </div>
 
-                    <div style={{ lineHeight: 1.8, color: "#d1d5db" }}>
+                    <div
+                      style={{
+                        lineHeight: 1.8,
+                        color: "#d1d5db"
+                      }}
+                    >
                       {selectedProduct.description}
                     </div>
                   </div>
@@ -1487,20 +1601,28 @@ export default function App() {
                         addToCart(selectedProduct);
                         setSelectedProduct(null);
                       }}
+                      disabled={!getStockStyle(selectedProduct.name).allowCart}
                       style={{
                         flex: 1,
                         padding: "13px 16px",
                         borderRadius: "12px",
                         border: "none",
-                        background:
-                          "linear-gradient(180deg, #d7aa63 0%, #bf914f 100%)",
+                        background: !getStockStyle(selectedProduct.name).allowCart
+                          ? "#6b7280"
+                          : "linear-gradient(180deg, #d7aa63 0%, #bf914f 100%)",
                         color: "#111827",
-                        cursor: "pointer",
+                        cursor: !getStockStyle(selectedProduct.name).allowCart
+                          ? "not-allowed"
+                          : "pointer",
                         fontWeight: "800",
                         fontSize: "16px"
                       }}
                     >
-                      담기
+                      {!getStockStyle(selectedProduct.name).allowCart
+                        ? "품절"
+                        : getStockInfo(selectedProduct.name).status === "RESERVE"
+                        ? "예약 담기"
+                        : "담기"}
                     </button>
 
                     <button
@@ -1569,7 +1691,9 @@ export default function App() {
               </p>
 
               <div style={{ marginBottom: "16px" }}>
-                <div style={{ marginBottom: "8px", fontWeight: "700" }}>이름</div>
+                <div style={{ marginBottom: "8px", fontWeight: "700" }}>
+                  이름
+                </div>
                 <input
                   type="text"
                   value={orderInfo.customerName}
@@ -1598,13 +1722,11 @@ export default function App() {
                 </div>
                 <input
                   type="text"
-                  inputMode="numeric"
-                  placeholder="예: 31076213004"
                   value={orderInfo.contact}
                   onChange={(e) =>
                     setOrderInfo((prev) => ({
                       ...prev,
-                      contact: formatPhoneNumber(e.target.value)
+                      contact: e.target.value
                     }))
                   }
                   style={{
@@ -1628,7 +1750,6 @@ export default function App() {
                   lineHeight: 1.6
                 }}
               >
-                숫자만 입력하시면 (310) 7621-3004 형식으로 자동 정리됩니다.<br />
                 이전에 입력한 닉네임과 전화번호는 이 브라우저에 저장됩니다.
               </div>
 
