@@ -359,30 +359,29 @@ export default function App() {
     }
   };
 
-  const stockStyle = {
-    ON: {
-      label: "판매 가능",
-      color: "#22c55e",
-      textColor: "#052e16",
-      allowCart: true,
-      buttonText: "담기"
-    },
-    RESERVE: {
-      label: "예약 가능",
-      color: "#f97316",
-      textColor: "#ffffff",
-      allowCart: true,
-      buttonText: "예약 담기"
-    },
-    SOLDOUT: {
-      label: "품절",
-      color: "#ef4444",
-      textColor: "#ffffff",
-      allowCart: false,
-      buttonText: "품절"
-    }
-  };
-
+ const stockStyle = {
+  ON: {
+    label: "판매 가능",
+    color: "#22c55e",
+    textColor: "#052e16",
+    allowCart: true,
+    buttonText: "담기"
+  },
+  RESERVE: {
+    label: "예약 가능",
+    color: "#f97316",
+    textColor: "#111827",
+    allowCart: true,
+    buttonText: "예약 담기"
+  },
+  SOLDOUT: {
+    label: "품절",
+    color: "#ef4444",
+    textColor: "#ffffff",
+    allowCart: false,
+    buttonText: "품절"
+  }
+};
   const groupedProducts = useMemo(() => {
     return CATEGORY_CONFIG.map((category) => ({
       ...category,
@@ -946,24 +945,26 @@ export default function App() {
                               {product.tag}
                             </div>
 
-                            <div
-                              style={{
-                                position: "absolute",
-                                top: "10px",
-                                right: "10px",
-                                zIndex: 2,
-                                padding: "7px 11px",
-                                borderRadius: "999px",
-                                backgroundColor: productStockStyle.color,
-                                color: productStockStyle.textColor,
-                                fontSize: "12px",
-                                fontWeight: "900",
-                                letterSpacing: "-0.01em",
-                                boxShadow: "0 8px 18px rgba(0,0,0,0.32)"
-                              }}
-                            >
-                              {productStockStyle.label}
-                            </div>
+                           {productStockInfo.status !== "ON" && (
+  <div
+    style={{
+      position: "absolute",
+      top: "10px",
+      right: "10px",
+      zIndex: 2,
+      padding: "7px 11px",
+      borderRadius: "999px",
+      backgroundColor: productStockStyle.color,
+      color: productStockStyle.textColor,
+      fontSize: "12px",
+      fontWeight: "900",
+      letterSpacing: "-0.01em",
+      boxShadow: "0 8px 18px rgba(0,0,0,0.32)"
+    }}
+  >
+    {productStockStyle.label}
+  </div>
+)}
 
                             <img
                               src={product.image}
